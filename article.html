@@ -9,32 +9,37 @@
 <style>
 :root {
   --bg:#fafafa; --surface:#fff; --surface2:#f5f5f5; --border:#e5e5e5;
-  --accent:#2563eb; --accent2:#1d4ed8;
-  --text:#171717; --muted:#737373; --error:#dc2626; --premium:#7c3aed;
-  --radius:12px; --radius-sm:8px; --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+  --accent:#2563eb; --accent2:#1d4ed8; --text:#171717; --muted:#737373;
+  --error:#dc2626; --premium:#7c3aed; --radius:12px; --radius-sm:8px;
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
-
-nav{background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
-  padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+nav{background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .nav-logo{font-family:'Lexend',sans-serif;font-size:1.25rem;font-weight:800;letter-spacing:-0.03em;text-decoration:none;color:var(--text)}
 .nav-logo span{color:var(--accent)}
-.btn-back{padding:8px 16px;border:1.5px solid var(--border);border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;color:var(--muted);transition:all var(--transition);background:transparent}
-.btn-back:hover{border-color:var(--accent);color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.btn-nav{padding:8px 18px;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all var(--transition);text-decoration:none;font-family:'Inter',sans-serif}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-fill{background:var(--accent);color:#fff;border:none}
+.btn-fill:hover{background:var(--accent2)}
+.user-menu{display:none;align-items:center;gap:10px}
+.user-menu.show{display:flex}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem}
 
 .article-container{max-width:780px;margin:0 auto;padding:40px 24px 60px}
 .article-header{margin-bottom:32px}
 .article-category{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:12px}
-.article-title{font-family:'Lexend',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.25;letter-spacing:-0.03em;margin-bottom:16px}
-.article-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:0.85rem;color:var(--muted);margin-bottom:20px}
-.article-meta span{display:flex;align-items:center;gap:5px}
-.premium-badge{display:inline-flex;align-items:center;gap:4px;font-size:0.75rem;font-weight:700;color:var(--premium);background:rgba(124,58,237,0.06);padding:4px 12px;border-radius:12px}
-.featured-image{width:100%;max-height:450px;object-fit:cover;border-radius:var(--radius);margin-bottom:32px;border:1px solid var(--border)}
+.article-title{font-family:'Lexend',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.25;letter-spacing:-0.03em;margin-bottom:14px}
+.article-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:0.84rem;color:var(--muted);margin-bottom:18px}
+.article-meta .dot{width:3px;height:3px;background:var(--muted);border-radius:50%}
+.premium-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.72rem;font-weight:700;color:var(--premium);background:rgba(124,58,237,0.06);padding:4px 12px;border-radius:12px}
+.free-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.72rem;font-weight:700;color:var(--success);background:rgba(22,163,74,0.06);padding:4px 12px;border-radius:12px}
+.featured-image{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius);margin-bottom:32px;border:1px solid var(--border)}
 .article-body{font-size:1.05rem;line-height:1.85;color:#333}
 .article-body h1,.article-body h2,.article-body h3{font-family:'Lexend',sans-serif;font-weight:700;margin:28px 0 12px;line-height:1.3;color:var(--text)}
-.article-body h2{font-size:1.5rem}
-.article-body h3{font-size:1.2rem}
+.article-body h2{font-size:1.5rem}.article-body h3{font-size:1.2rem}
 .article-body p{margin-bottom:18px}
 .article-body img{max-width:100%;height:auto;border-radius:var(--radius-sm);margin:20px 0;border:1px solid var(--border)}
 .article-body strong{font-weight:700}
@@ -43,91 +48,177 @@ nav{background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:1
 .article-body ul,.article-body ol{padding-left:24px;margin-bottom:18px}
 .article-body li{margin-bottom:6px}
 .article-body code{background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:0.9em}
-.article-body pre{background:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:var(--radius-sm);overflow-x:auto;margin:20px 0;font-size:0.88rem;line-height:1.6}
+.article-body pre{background:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:var(--radius-sm);overflow-x:auto;margin:20px 0;font-size:0.86rem;line-height:1.6}
 
-.locked-overlay{text-align:center;padding:60px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
-.locked-overlay .icon{font-size:3rem;margin-bottom:16px}
-.locked-overlay h2{font-family:'Lexend',sans-serif;font-size:1.4rem;margin-bottom:8px}
-.locked-overlay p{color:var(--muted);margin-bottom:20px}
-.btn-upgrade{padding:12px 28px;background:var(--premium);color:#fff;border:none;border-radius:24px;font-family:'Lexend',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
-.btn-upgrade:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.25)}
+.gate-overlay{text-align:center;padding:60px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);max-width:520px;margin:40px auto}
+.gate-overlay h2{font-family:'Lexend',sans-serif;font-size:1.3rem;margin-bottom:8px}
+.gate-overlay p{color:var(--muted);margin-bottom:16px;font-size:0.9rem}
+.plan-row{display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:18px}
+.plan-item{background:rgba(124,58,237,0.03);border:1px solid rgba(124,58,237,0.12);border-radius:var(--radius-sm);padding:12px 14px}
+.plan-item h4{font-family:'Lexend',sans-serif;font-size:0.82rem;color:var(--premium);margin-bottom:2px}
+.plan-item p{font-size:0.76rem;color:var(--muted);margin-bottom:0}
+.btn-upgrade{width:100%;padding:12px;background:var(--premium);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Lexend',sans-serif;font-size:0.86rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+.btn-upgrade:hover{background:#6d28d9}
 
 .loading{text-align:center;padding:80px;color:var(--muted)}
 .spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-@media(max-width:768px){
-  .article-container{padding:24px 16px 40px}
-  .article-body{font-size:1rem}
-}
+footer{border-top:1px solid var(--border);background:var(--surface);padding:24px;text-align:center;margin-top:40px}
+footer a{color:var(--accent);text-decoration:none;font-size:0.8rem}
+
+@media(max-width:768px){.article-container{padding:24px 16px 40px}.article-body{font-size:1rem}}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="/" class="nav-logo">md<span>alamin</span></a>
-  <a href="/" class="btn-back">← Back to Home</a>
+  <div class="nav-right">
+    <a href="/" class="btn-nav btn-outline">Home</a>
+    <div id="loggedOutBtns">
+      <button class="btn-nav btn-outline" onclick="openLogin()">Sign In</button>
+      <button class="btn-nav btn-fill" onclick="openSignup()">Get Started</button>
+    </div>
+    <div class="user-menu" id="userMenu">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <span style="font-size:0.8rem;font-weight:600" id="userNameDisplay"></span>
+      <button class="btn-nav btn-outline" onclick="logout()" style="font-size:0.7rem;padding:5px 10px">Sign Out</button>
+    </div>
+  </div>
 </nav>
 
 <div class="article-container" id="articleContent">
   <div class="loading"><div class="spinner"></div><p>Loading article...</p></div>
 </div>
 
-<script>
-const token = localStorage.getItem('blog_token');
-const user = JSON.parse(localStorage.getItem('blog_user') || 'null');
-const slug = new URLSearchParams(location.search).get('slug');
+<div class="modal-overlay" id="authModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(2px)">
+  <div class="modal" style="background:#fff;border-radius:12px;padding:28px 24px;max-width:400px;width:100%;text-align:center">
+    <button onclick="closeAuth()" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#737373">&times;</button>
+    <h3 style="font-family:'Lexend',sans-serif;margin-bottom:16px" id="authTitle">Sign In</h3>
+    <div id="authAlert" style="display:none;padding:10px;border-radius:6px;font-size:0.78rem;margin-bottom:12px"></div>
+    <div id="loginF">
+      <div style="margin-bottom:10px;text-align:left"><label style="font-size:0.66rem;font-weight:700;text-transform:uppercase;color:#737373;display:block;margin-bottom:4px">Email</label><input style="width:100%;padding:10px;border:1.5px solid #e5e5e5;border-radius:6px;font-family:'Inter',sans-serif;font-size:0.86rem" type="email" id="loginEmail" placeholder="your@email.com"></div>
+      <div style="margin-bottom:12px;text-align:left"><label style="font-size:0.66rem;font-weight:700;text-transform:uppercase;color:#737373;display:block;margin-bottom:4px">Password</label><input style="width:100%;padding:10px;border:1.5px solid #e5e5e5;border-radius:6px;font-family:'Inter',sans-serif;font-size:0.86rem" type="password" id="loginPassword" placeholder="Password"></div>
+      <button onclick="doLogin()" style="width:100%;padding:11px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-family:'Lexend',sans-serif;font-weight:600;cursor:pointer">Sign In</button>
+      <p style="font-size:0.76rem;color:#737373;margin-top:10px">No account? <a onclick="switchAuth('signup')" style="color:#2563eb;cursor:pointer;font-weight:600">Create one</a></p>
+    </div>
+    <div id="signupF" style="display:none">
+      <div style="margin-bottom:10px;text-align:left"><label style="font-size:0.66rem;font-weight:700;text-transform:uppercase;color:#737373;display:block;margin-bottom:4px">Name</label><input style="width:100%;padding:10px;border:1.5px solid #e5e5e5;border-radius:6px;font-family:'Inter',sans-serif;font-size:0.86rem" type="text" id="signupName" placeholder="Your name"></div>
+      <div style="margin-bottom:10px;text-align:left"><label style="font-size:0.66rem;font-weight:700;text-transform:uppercase;color:#737373;display:block;margin-bottom:4px">Email</label><input style="width:100%;padding:10px;border:1.5px solid #e5e5e5;border-radius:6px;font-family:'Inter',sans-serif;font-size:0.86rem" type="email" id="signupEmail" placeholder="your@email.com"></div>
+      <div style="margin-bottom:12px;text-align:left"><label style="font-size:0.66rem;font-weight:700;text-transform:uppercase;color:#737373;display:block;margin-bottom:4px">Password</label><input style="width:100%;padding:10px;border:1.5px solid #e5e5e5;border-radius:6px;font-family:'Inter',sans-serif;font-size:0.86rem" type="password" id="signupPassword" placeholder="Min 6 characters"></div>
+      <button onclick="doSignup()" style="width:100%;padding:11px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-family:'Lexend',sans-serif;font-weight:600;cursor:pointer">Create Account</button>
+      <p style="font-size:0.76rem;color:#737373;margin-top:10px">Have account? <a onclick="switchAuth('login')" style="color:#2563eb;cursor:pointer;font-weight:600">Sign in</a></p>
+    </div>
+  </div>
+</div>
 
-if(!slug) window.location.href = '/';
+<footer>
+  <a href="/">Home</a> · <a href="/contact.html">Contact</a>
+  <p style="font-size:0.72rem;color:var(--muted);margin-top:4px">&copy; 2024 mdalamin</p>
+</footer>
+
+<script>
+let token=localStorage.getItem('blog_token');
+let currentUser=JSON.parse(localStorage.getItem('blog_user')||'null');
+const slug=new URLSearchParams(location.search).get('slug');
+if(!slug)window.location.href='/';
+
+function init(){
+  if(currentUser){
+    document.getElementById('loggedOutBtns').style.display='none';
+    document.getElementById('userMenu').classList.add('show');
+    document.getElementById('userNameDisplay').textContent=currentUser.name;
+    document.getElementById('userAvatar').textContent=currentUser.name.charAt(0).toUpperCase();
+  }
+  loadArticle();
+}
 
 async function loadArticle(){
   try{
-    const headers = {};
-    if(token) headers['Authorization'] = `Bearer ${token}`;
-    const res = await fetch(`/api/blog/article/${slug}`, { headers });
-    const article = await res.json();
+    const headers={};if(token)headers['Authorization']=`Bearer ${token}`;
+    const res=await fetch(`/api/blog/article/${slug}`,{headers});
+    const article=await res.json();
 
-    if(article.error){
-      document.getElementById('articleContent').innerHTML = `<div class="locked-overlay"><div class="icon">⚠️</div><h2>Article Not Found</h2><p>${article.error}</p></div>`;
-      return;
-    }
+    if(article.error){showGate(article.error);return}
+    if(article.locked){showUpgradeGate();return}
 
-    if(article.locked){
-      document.getElementById('articleContent').innerHTML = `
-        <div class="locked-overlay">
-          <div class="icon">🔒</div>
-          <h2>Premium Content</h2>
-          <p>This article is for members only. Upgrade your membership to read.</p>
-          <p style="font-size:0.85rem;color:var(--muted)">Monthly 100 BDT · Max 200 BDT · Yearly 1200 BDT</p>
-          <p style="font-size:0.8rem;color:var(--muted)">Contact: <strong>nx@gmail.com</strong> or Telegram <strong>@nxReal</strong></p>
-          ${!user ? '<button class="btn-upgrade" onclick="window.location.href=\'/\'">Sign In</button>' : ''}
-        </div>`;
-      return;
-    }
-
-    document.title = `${article.title} — mdalamin`;
-    document.getElementById('articleContent').innerHTML = `
+    document.title=`${article.title} — mdalamin`;
+    document.getElementById('articleContent').innerHTML=`
       <div class="article-header">
-        ${article.category_name ? `<div class="article-category">${esc(article.category_name)}</div>` : ''}
+        ${article.category_name?`<div class="article-category">${esc(article.category_name)}</div>`:''}
         <h1 class="article-title">${esc(article.title)}</h1>
         <div class="article-meta">
-          <span>By ${esc(article.author_name || 'Admin')}</span>
-          <span>·</span>
-          <span>${article.published_at ? new Date(article.published_at).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) : ''}</span>
-          ${article.is_premium ? '<span class="premium-badge">✦ Premium</span>' : '<span style="color:var(--success);font-weight:600;font-size:0.75rem">Free</span>'}
+          <span>By ${esc(article.author_name||'Admin')}</span><span class="dot"></span>
+          <span>${article.published_at?new Date(article.published_at).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}):''}</span>
+          ${article.is_premium?`<span class="premium-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#7c3aed"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Premium</span>`:`<span class="free-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Free</span>`}
         </div>
       </div>
-      ${article.featured_image ? `<img class="featured-image" src="${article.featured_image}" alt="${esc(article.title)}" loading="lazy">` : ''}
+      ${article.featured_image?`<img class="featured-image" src="${article.featured_image}" alt="${esc(article.title)}">`:''}
       <div class="article-body">${article.body}</div>
     `;
-  }catch(e){
-    document.getElementById('articleContent').innerHTML = `<div class="locked-overlay"><div class="icon">⚠️</div><h2>Error</h2><p>Failed to load article.</p></div>`;
-  }
+  }catch(e){showGate('Failed to load article')}
 }
 
-function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+function showGate(msg){
+  document.getElementById('articleContent').innerHTML=`
+    <div class="gate-overlay">
+      <h2>Sign In Required</h2><p>${msg||'Please sign in to read articles.'}</p>
+      <button class="btn-upgrade" onclick="openLogin()">Sign In</button>
+    </div>`;
+}
 
-loadArticle();
+function showUpgradeGate(){
+  document.getElementById('articleContent').innerHTML=`
+    <div class="gate-overlay">
+      <h2>Premium Content</h2><p>This article is for premium members only. Choose a plan to unlock all premium content.</p>
+      <div class="plan-row">
+        <div class="plan-item"><h4>Monthly — 100 BDT</h4><p>Premium articles during membership + all free</p></div>
+        <div class="plan-item"><h4>Monthly Max — 200 BDT</h4><p>All premium: past, present & future</p></div>
+        <div class="plan-item"><h4>Yearly — 1200 BDT</h4><p>Full access for 12 months</p></div>
+      </div>
+      <button class="btn-upgrade" onclick="window.location.href='/contact.html'">Contact to Upgrade</button>
+    </div>`;
+}
+
+// Auth mini-modal
+function openLogin(){switchAuth('login');document.getElementById('authModal').style.display='grid'}
+function openSignup(){switchAuth('signup');document.getElementById('authModal').style.display='grid'}
+function closeAuth(){document.getElementById('authModal').style.display='none'}
+function switchAuth(t){
+  document.getElementById('authTitle').textContent=t==='login'?'Sign In':'Create Account';
+  document.getElementById('loginF').style.display=t==='login'?'block':'none';
+  document.getElementById('signupF').style.display=t==='login'?'none':'block';
+}
+
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
+  try{
+    const res=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
+    if(!res.ok)return alert(data.error);
+    token=data.token;currentUser=data.user;
+    localStorage.setItem('blog_token',token);localStorage.setItem('blog_user',JSON.stringify(currentUser));
+    closeAuth();location.reload();
+  }catch(e){alert('Network error')}
+}
+
+async function doSignup(){
+  const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim(),password=document.getElementById('signupPassword').value;
+  if(password.length<6)return alert('Password 6+ characters');
+  try{
+    const res=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})});
+    const data=await res.json();
+    if(!res.ok)return alert(data.error);
+    token=data.token;currentUser=data.user;
+    localStorage.setItem('blog_token',token);localStorage.setItem('blog_user',JSON.stringify(currentUser));
+    closeAuth();location.reload();
+  }catch(e){alert('Network error')}
+}
+
+function logout(){localStorage.clear();token=null;currentUser=null;location.href='/'}
+function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
+init();
 </script>
 </body>
 </html>
