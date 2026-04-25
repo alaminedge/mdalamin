@@ -1,0 +1,8 @@
+name = "mdalamin"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "BLOG_DB"
+database_name = "mdalamin"
+database_id = "38fd7157-0641-4deb-a65e-c3a240c36dff"
