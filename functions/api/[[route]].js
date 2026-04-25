@@ -139,19 +139,17 @@ async function handleBlog(method, path, body, db, user) {
       JOIN articles a ON hf.article_id = a.id
       LEFT JOIN categories c ON a.category_id = c.id
       LEFT JOIN blog_users u ON a.author_id = u.id
-      WHERE a.status = 'published' AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
-      ORDER BY hf.sort_order ASC
-      LIMIT 10
+      WHERE a.status IN ('published', 'archived') AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
+      ORDER BY hf.sort_order ASC LIMIT 10
     `).all();
 
-    // If no featured, show recent
     if (!featured.results.length) {
       const recent = await db.prepare(`
         SELECT a.*, c.name as category_name, c.slug as category_slug, u.name as author_name
         FROM articles a
         LEFT JOIN categories c ON a.category_id = c.id
         LEFT JOIN blog_users u ON a.author_id = u.id
-        WHERE a.status = 'published' AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
+        WHERE a.status IN ('published', 'archived') AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
         ORDER BY a.published_at DESC LIMIT 10
       `).all();
       return json(recent.results);
@@ -165,16 +163,14 @@ async function handleBlog(method, path, body, db, user) {
     const cat = await db.prepare('SELECT * FROM categories WHERE slug=?').bind(slug).first();
     if (!cat) return err('Category not found', 404);
     const page = parseInt(new URL(request.url).searchParams.get('page') || '1');
-    const limit = 10;
-    const offset = (page - 1) * limit;
+    const limit = 10; const offset = (page - 1) * limit;
     const articles = await db.prepare(`
       SELECT a.*, u.name as author_name
-      FROM articles a
-      LEFT JOIN blog_users u ON a.author_id = u.id
-      WHERE a.category_id = ? AND a.status = 'published' AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
+      FROM articles a LEFT JOIN blog_users u ON a.author_id = u.id
+      WHERE a.category_id = ? AND a.status IN ('published', 'archived') AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
       ORDER BY a.published_at DESC LIMIT ? OFFSET ?
     `).bind(cat.id, limit, offset).all();
-    const count = await db.prepare('SELECT COUNT(*) as cnt FROM articles WHERE category_id=? AND status=?').bind(cat.id, 'published').first();
+    const count = await db.prepare('SELECT COUNT(*) as cnt FROM articles WHERE category_id=? AND status IN (\'published\',\'archived\')').bind(cat.id).first();
     return json({ category: cat, articles: articles.results, total: count.cnt, page, totalPages: Math.ceil(count.cnt/limit) });
   }
 
@@ -186,20 +182,32 @@ async function handleBlog(method, path, body, db, user) {
       FROM articles a
       LEFT JOIN categories c ON a.category_id = c.id
       LEFT JOIN blog_users u ON a.author_id = u.id
-      WHERE a.slug = ? AND a.status = 'published' AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
+      WHERE a.slug = ? AND a.status IN ('published', 'archived') AND (a.scheduled_at IS NULL OR a.scheduled_at <= datetime('now'))
     `).bind(slug).first();
     if (!article) return err('Article not found', 404);
 
-    // Check premium access
+    // Premium access check
     if (article.is_premium) {
       if (!user) return json({ ...article, locked: true, images: [] });
       if (user.role === 'admin' || user.role === 'moderator') { /* allow */ }
       else {
         const u = await db.prepare('SELECT membership_type, membership_expires FROM blog_users WHERE id=?').bind(user.id).first();
-        if (u.membership_type === 'free') return json({ ...article, locked: true, images: [] });
-        if (u.membership_type === 'monthly') {
-          if (new Date(article.published_at) < new Date(u.membership_expires)) { /* ok */ }
-          else return json({ ...article, locked: true, images: [] });
+        if (!u || u.membership_type === 'free') return json({ ...article, locked: true, images: [] });
+        
+        // Check if membership expired
+        if (u.membership_expires && new Date(u.membership_expires) < new Date()) {
+          return json({ ...article, locked: true, images: [] });
+        }
+
+        if (u.membership_type === 'monthly_max' || u.membership_type === 'yearly') {
+          // Full access to all premium
+        } else if (u.membership_type === 'monthly') {
+          // Only articles published during membership
+          if (!u.membership_expires || new Date(article.published_at) > new Date(u.membership_expires)) {
+            return json({ ...article, locked: true, images: [] });
+          }
+        } else {
+          return json({ ...article, locked: true, images: [] });
         }
       }
     }
@@ -208,15 +216,13 @@ async function handleBlog(method, path, body, db, user) {
     return json({ ...article, locked: false, images: images.results });
   }
 
-  // GET /api/blog/search?q=
+  // GET /api/blog/search
   if (method === 'GET' && path === '/search') {
     const q = `%${new URL(request.url).searchParams.get('q') || ''}%`;
     const articles = await db.prepare(`
       SELECT a.*, c.name as category_name, c.slug as category_slug, u.name as author_name
-      FROM articles a
-      LEFT JOIN categories c ON a.category_id = c.id
-      LEFT JOIN blog_users u ON a.author_id = u.id
-      WHERE a.status = 'published' AND (a.title LIKE ? OR a.excerpt LIKE ?)
+      FROM articles a LEFT JOIN categories c ON a.category_id = c.id LEFT JOIN blog_users u ON a.author_id = u.id
+      WHERE a.status IN ('published', 'archived') AND (a.title LIKE ? OR a.excerpt LIKE ?)
       ORDER BY a.published_at DESC LIMIT 20
     `).bind(q, q).all();
     return json(articles.results);
@@ -233,9 +239,7 @@ async function handleBlog(method, path, body, db, user) {
     if (!user) return json({ count: 0 });
     const count = await db.prepare(`
       SELECT COUNT(*) as cnt FROM notices n
-      WHERE n.is_active = 1 AND n.id NOT IN (
-        SELECT notice_id FROM notice_reads WHERE user_id = ?
-      )
+      WHERE n.is_active = 1 AND n.id NOT IN (SELECT notice_id FROM notice_reads WHERE user_id = ?)
     `).bind(user.id).first();
     return json({ count: count.cnt });
   }
@@ -254,13 +258,10 @@ async function handleBlog(method, path, body, db, user) {
 // ═══ USER ═══
 async function handleUser(method, path, body, db, user) {
   if (!user) return err('Unauthorized', 401);
-
-  // GET /api/user/profile
   if (method === 'GET' && path === '/profile') {
     const u = await db.prepare('SELECT id,name,email,role,membership_type,membership_expires,is_blocked FROM blog_users WHERE id=?').bind(user.id).first();
     return json(u);
   }
-
   return err('Not found', 404);
 }
 
@@ -276,6 +277,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'POST' && path === '/categories') {
+    if (user.role !== 'admin') return err('Only admin can create categories', 403);
     const { name, description, show_on_homepage } = body;
     if (!name) return err('Category name required');
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -287,6 +289,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'PUT' && path.match(/^\/categories\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can edit categories', 403);
     const catId = parseInt(path.split('/')[2]);
     const { name, description, show_on_homepage } = body;
     const updates = []; const values = [];
@@ -300,6 +303,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'DELETE' && path.match(/^\/categories\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can delete categories', 403);
     const catId = parseInt(path.split('/')[2]);
     await db.prepare('DELETE FROM categories WHERE id = ?').bind(catId).run();
     return json({ message: 'Category deleted' });
@@ -309,9 +313,7 @@ async function handleAdmin(method, path, body, db, user) {
   if (method === 'GET' && path === '/articles') {
     const articles = await db.prepare(`
       SELECT a.*, c.name as category_name, u.name as author_name
-      FROM articles a
-      LEFT JOIN categories c ON a.category_id = c.id
-      LEFT JOIN blog_users u ON a.author_id = u.id
+      FROM articles a LEFT JOIN categories c ON a.category_id = c.id LEFT JOIN blog_users u ON a.author_id = u.id
       ORDER BY a.created_at DESC
     `).all();
     return json(articles.results);
@@ -350,7 +352,7 @@ async function handleAdmin(method, path, body, db, user) {
     if (is_premium !== undefined) { updates.push('is_premium = ?'); values.push(is_premium); }
     if (status !== undefined) {
       updates.push('status = ?'); values.push(status);
-      if (status === 'published') { updates.push('published_at = ?'); values.push(new Date().toISOString()); }
+      if (status === 'published' || status === 'archived') { updates.push('published_at = COALESCE(published_at, ?)'); values.push(new Date().toISOString()); }
     }
     if (scheduled_at !== undefined) { updates.push('scheduled_at = ?'); values.push(scheduled_at); }
     updates.push('updated_at = ?'); values.push(new Date().toISOString());
@@ -361,8 +363,12 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'DELETE' && path.match(/^\/articles\/\d+$/)) {
-    if (user.role !== 'admin') return err('Only admin can delete articles', 403);
+    // Only admin or the article's author can delete
     const articleId = parseInt(path.split('/')[2]);
+    if (user.role !== 'admin') {
+      const art = await db.prepare('SELECT author_id FROM articles WHERE id=?').bind(articleId).first();
+      if (!art || art.author_id !== user.id) return err('Only admin can delete articles', 403);
+    }
     await db.prepare('DELETE FROM article_images WHERE article_id = ?').bind(articleId).run();
     await db.prepare('DELETE FROM homepage_featured WHERE article_id = ?').bind(articleId).run();
     await db.prepare('DELETE FROM articles WHERE id = ?').bind(articleId).run();
@@ -391,16 +397,15 @@ async function handleAdmin(method, path, body, db, user) {
   // ═══ HOMEPAGE FEATURED ═══
   if (method === 'GET' && path === '/featured') {
     const featured = await db.prepare(`
-      SELECT a.*, c.name as category_name
-      FROM homepage_featured hf
-      JOIN articles a ON hf.article_id = a.id
-      LEFT JOIN categories c ON a.category_id = c.id
+      SELECT a.*, c.name as category_name FROM homepage_featured hf
+      JOIN articles a ON hf.article_id = a.id LEFT JOIN categories c ON a.category_id = c.id
       ORDER BY hf.sort_order ASC
     `).all();
     return json(featured.results);
   }
 
   if (method === 'POST' && path === '/featured') {
+    if (user.role !== 'admin') return err('Only admin can manage homepage', 403);
     const { article_id } = body;
     try {
       await db.prepare('INSERT OR IGNORE INTO homepage_featured (article_id) VALUES (?)').bind(article_id).run();
@@ -409,6 +414,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'DELETE' && path.match(/^\/featured\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can manage homepage', 403);
     const articleId = parseInt(path.split('/')[2]);
     await db.prepare('DELETE FROM homepage_featured WHERE article_id = ?').bind(articleId).run();
     return json({ message: 'Removed from homepage' });
@@ -421,6 +427,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'POST' && path === '/notices') {
+    if (user.role !== 'admin') return err('Only admin can create notices', 403);
     const { title, body: noticeBody, image_url } = body;
     if (!title) return err('Title required');
     const result = await db.prepare('INSERT INTO notices (title,body,image_url) VALUES (?,?,?)')
@@ -429,6 +436,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'PUT' && path.match(/^\/notices\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can edit notices', 403);
     const noticeId = parseInt(path.split('/')[2]);
     const { title, body: noticeBody, image_url, is_active } = body;
     const updates = []; const values = [];
@@ -443,17 +451,20 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'DELETE' && path.match(/^\/notices\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can delete notices', 403);
     await db.prepare('DELETE FROM notices WHERE id = ?').bind(parseInt(path.split('/')[2])).run();
     return json({ message: 'Notice deleted' });
   }
 
   // ═══ USERS ═══
   if (method === 'GET' && path === '/users') {
+    if (user.role !== 'admin') return err('Only admin can view users', 403);
     const users = await db.prepare('SELECT id,name,email,role,is_blocked,membership_type,membership_expires,created_at FROM blog_users ORDER BY created_at DESC').all();
     return json(users.results);
   }
 
   if (method === 'PUT' && path.match(/^\/users\/\d+$/)) {
+    if (user.role !== 'admin') return err('Only admin can manage users', 403);
     const userId = parseInt(path.split('/')[2]);
     const { role, is_blocked, membership_type, membership_expires } = body;
     const updates = []; const values = [];
@@ -468,6 +479,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   if (method === 'POST' && path === '/grant-membership') {
+    if (user.role !== 'admin') return err('Only admin can grant membership', 403);
     const { user_id, membership_type, duration_days } = body;
     if (!user_id || !membership_type) return err('user_id and membership_type required');
     const days = parseInt(duration_days) || (membership_type === 'yearly' ? 365 : 30);
