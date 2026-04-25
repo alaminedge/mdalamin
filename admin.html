@@ -1,113 +1,162 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — mdalamin</title>
+<title>Admin — mdalamin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lexend:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#f5f5f7; --sidebar-bg:#1a1a2e; --surface:#fff; --surface2:#f9f9fb; --border:#e5e5e5;
-  --accent:#2563eb; --accent2:#1d4ed8; --accent3:#3b82f6;
-  --text:#171717; --muted:#737373; --error:#dc2626; --success:#16a34a; --premium:#7c3aed;
-  --radius:10px; --radius-sm:6px; --transition:0.2s cubic-bezier(0.4,0,0.2,1);
-  --sw:230px;
+:root{
+  --bg:#f5f4f2;--sidebar:#141414;--sidebar2:#1e1e1e;--surface:#fff;--surface2:#faf9f7;
+  --border:#e8e5e0;--border2:#d8d4ce;
+  --ink:#0d0d0d;--muted:#78746c;
+  --accent:#1a3a5c;--accent2:#0f2540;--accent3:#2a5a8c;--accent-light:rgba(26,58,92,.08);
+  --gold:#c9a84c;--gold2:#b8973a;--gold-light:rgba(201,168,76,.1);
+  --error:#c0392b;--error-light:rgba(192,57,43,.08);
+  --success:#2e7d52;--success-light:rgba(46,125,82,.08);
+  --premium:#7c4f2a;--premium-light:rgba(124,79,42,.08);
+  --radius:5px;--radius-md:9px;--radius-lg:14px;
+  --transition:.2s cubic-bezier(.4,0,.2,1);
+  --shadow:0 2px 12px rgba(0,0,0,.07);--shadow-md:0 6px 28px rgba(0,0,0,.1);
+  --sw:240px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px}
 
-.sidebar{width:var(--sw);background:var(--sidebar-bg);color:#e0e0e0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform .3s;overflow-y:auto}
-.sidebar-top{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.sidebar-logo{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-0.02em;text-decoration:none}
-.sidebar-logo span{color:#60a5fa}
-.sidebar-sub{font-size:0.65rem;color:#888;text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
-.nav-section{padding:8px 0}
-.nav-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:#666;font-weight:700;padding:8px 18px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:0.8rem;font-weight:500;color:#aaa;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2px solid transparent;font-family:'Inter',sans-serif}
-.nav-item:hover{color:#fff;background:rgba(255,255,255,0.03)}
-.nav-item.active{color:#60a5fa;background:rgba(37,99,235,0.08);border-left-color:#2563eb}
-.sidebar-footer{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.7rem;color:#888}
-.btn-logout{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#aaa;padding:7px 14px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.74rem;cursor:pointer;transition:all var(--transition);width:100%}
-.btn-logout:hover{border-color:var(--error);color:var(--error)}
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sw);background:var(--sidebar);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform .3s;overflow-y:auto;overflow-x:hidden}
+.sidebar-top{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-logo{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:-.01em}
+.sidebar-logo em{font-style:italic;color:var(--gold)}
+.sidebar-role{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.28);margin-top:5px}
+.nav-section{padding:10px 0 4px}
+.nav-group-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.22);font-weight:700;padding:10px 20px 4px;font-family:'DM Mono',monospace}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.45);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2px solid transparent;font-family:'DM Sans',sans-serif;letter-spacing:.01em}
+.nav-item svg{flex-shrink:0;opacity:.6;transition:opacity var(--transition)}
+.nav-item:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.04)}
+.nav-item:hover svg{opacity:.85}
+.nav-item.active{color:#fff;background:rgba(201,168,76,.07);border-left-color:var(--gold)}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.admin-info{font-size:.72rem;color:rgba(255,255,255,.3);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);padding:8px 14px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.74rem;cursor:pointer;transition:all var(--transition);width:100%;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.btn-logout:hover{border-color:var(--error);color:#e87070}
 
+/* ── MAIN ── */
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{height:56px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
-.topbar-title{font-family:'Lexend',sans-serif;font-weight:700;font-size:0.95rem}
-.admin-badge{font-size:0.64rem;background:rgba(37,99,235,0.08);color:var(--accent);padding:4px 10px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
-.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer}
-.content{padding:24px;flex:1}
+.topbar{height:58px;padding:0 28px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.menu-btn{display:none;background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
+.topbar-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;letter-spacing:-.01em}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.role-badge{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:4px 12px;border-radius:20px;font-family:'DM Mono',monospace}
+.role-admin{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.role-mod{background:var(--accent-light);color:var(--accent);border:1px solid rgba(26,58,92,.15)}
+
+.content{padding:28px;flex:1}
 .view{display:none}
 .view.active{display:block}
 
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-.stat-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:700;margin-bottom:4px}
-.stat-val{font-family:'Lexend',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent)}
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 18px;transition:all var(--transition)}
+.stat-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.stat-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:8px;font-family:'DM Mono',monospace}
+.stat-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--accent);line-height:1}
+.stat-card.gold .stat-val{color:var(--gold)}
+.stat-card.green .stat-val{color:var(--success)}
 
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.section-title{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:700}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px}
-.card-body{padding:20px}
+/* ── SECTION HEAD ── */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.section-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
 
+/* ── BUTTONS ── */
+.btn{font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;padding:9px 18px;border-radius:var(--radius);border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;letter-spacing:.04em;text-transform:uppercase}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--accent)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:var(--error-light);color:var(--error);border:1.5px solid rgba(192,57,43,.15)}
+.btn-danger:hover{background:var(--error);color:#fff;border-color:var(--error)}
+.btn-success{background:var(--success-light);color:var(--success);border:1.5px solid rgba(46,125,82,.15)}
+.btn-success:hover{background:var(--success);color:#fff;border-color:var(--success)}
+.btn-gold{background:var(--gold-light);color:var(--gold2);border:1.5px solid rgba(201,168,76,.2)}
+.btn-gold:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn-sm{padding:5px 12px;font-size:.7rem}
+.btn-xs{padding:3px 9px;font-size:.66rem;border-radius:3px}
+
+/* ── TABLE ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:20px;overflow:hidden}
+.card-pad{padding:22px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--surface2);border-bottom:2px solid var(--border)}
+th{padding:11px 14px;text-align:left;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;white-space:nowrap;font-family:'DM Mono',monospace}
+td{padding:10px 14px;font-size:.8rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.td-title{font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── BADGES ── */
+.badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:20px;display:inline-block;font-family:'DM Mono',monospace}
+.b-published{background:var(--success-light);color:var(--success)}
+.b-draft{background:rgba(120,116,108,.08);color:var(--muted)}
+.b-scheduled{background:var(--accent-light);color:var(--accent)}
+.b-archived{background:rgba(120,116,108,.06);color:var(--muted);border:1px solid var(--border)}
+.b-premium{background:var(--gold-light);color:var(--gold2)}
+.b-free{background:var(--success-light);color:var(--success)}
+.b-admin{background:var(--gold-light);color:var(--gold2)}
+.b-mod{background:var(--accent-light);color:var(--accent)}
+.b-user{background:rgba(120,116,108,.06);color:var(--muted)}
+.b-blocked{background:var(--error-light);color:var(--error)}
+.b-active{background:var(--success-light);color:var(--success)}
+
+/* ── FORMS ── */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .form-group{margin-bottom:14px}
-.form-label{display:block;font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:5px}
-.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.84rem;color:var(--text);outline:none;transition:border-color var(--transition)}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
-.form-textarea{resize:vertical;min-height:100px}
-.form-hint{font-size:0.66rem;color:var(--muted);margin-top:4px}
-.toggle-label{display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer}
-input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px}
+.form-label{display:block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px;font-family:'DM Mono',monospace}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 13px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);outline:none;transition:all var(--transition)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.5}
+.form-textarea.code{font-family:'DM Mono',monospace;font-size:.78rem}
+.form-hint{font-size:.64rem;color:var(--muted);margin-top:4px}
+.toggle-row{display:flex;align-items:center;gap:8px;font-size:.82rem;cursor:pointer;user-select:none}
+input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:pointer}
 
-.btn{font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:600;padding:8px 16px;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;text-decoration:none}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:var(--accent2)}
-.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-.btn-danger{background:rgba(220,38,38,0.06);color:var(--error);border:1.5px solid rgba(220,38,38,0.15)}
-.btn-danger:hover{background:var(--error);color:#fff;border-color:var(--error)}
-.btn-success{background:rgba(22,163,74,0.06);color:var(--success);border:1.5px solid rgba(22,163,74,0.15)}
-.btn-success:hover{background:var(--success);color:#fff;border-color:var(--success)}
-.btn-sm{padding:4px 10px;font-size:0.7rem}
-.btn-xs{padding:3px 7px;font-size:0.66rem;border-radius:4px}
-
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{padding:10px 12px;text-align:left;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);font-weight:700;border-bottom:2px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;font-size:0.8rem;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:hover td{background:var(--surface2)}
-
-.badge{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 8px;border-radius:12px;display:inline-block}
-.badge-published{background:rgba(22,163,74,0.08);color:var(--success)}
-.badge-draft{background:rgba(115,115,115,0.08);color:var(--muted)}
-.badge-scheduled{background:rgba(37,99,235,0.08);color:var(--accent)}
-.badge-archived{background:rgba(115,115,115,0.06);color:var(--muted);border:1px solid var(--border)}
-.badge-premium{background:rgba(124,58,237,0.08);color:var(--premium)}
-.badge-free{background:rgba(22,163,74,0.08);color:var(--success)}
-.badge-blocked{background:rgba(220,38,38,0.08);color:var(--error)}
-
-.alert{padding:10px 14px;border-radius:var(--radius-sm);font-size:0.8rem;margin-bottom:14px}
+/* ── ALERT ── */
+.alert{padding:10px 14px;border-radius:var(--radius);font-size:.78rem;margin-bottom:14px;display:none}
+.alert.show{display:block}
 .alert-error{background:#fef2f2;border:1px solid #fecaca;color:var(--error)}
 .alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;place-items:center;padding:20px}
-.modal-overlay.open{display:grid}
-.modal{background:var(--surface);border-radius:var(--radius);padding:28px 24px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative;animation:modalIn 0.2s ease}
-@keyframes modalIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);line-height:1}
-.modal h3{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:18px}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,13,13,.6);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:grid;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border-radius:var(--radius-lg);max-width:680px;width:100%;max-height:88vh;overflow-y:auto;position:relative;animation:slideUp .25s cubic-bezier(.34,1.3,.64,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-head{padding:24px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+.modal-close{background:var(--surface2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all var(--transition);flex-shrink:0}
+.modal-close:hover{background:var(--border2);color:var(--ink)}
+.modal-body{padding:22px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px}
 
-footer{border-top:1px solid var(--border);text-align:center;padding:16px;font-size:0.72rem;color:var(--muted)}
+/* ── UPLOAD ── */
+.upload-result{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-top:8px;font-size:.76rem;word-break:break-all}
+
+footer{border-top:1px solid var(--border);background:var(--surface);padding:16px 28px;text-align:center;font-size:.72rem;color:var(--muted)}
 footer a{color:var(--accent);text-decoration:none}
 
-@media(max-width:900px){
+@media(max-width:960px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
   .main{margin-left:0}
-  .menu-btn{display:block}
-  .content{padding:16px}
+  .menu-btn{display:flex}
+  .content{padding:18px 16px}
   .form-row,.form-row-3{grid-template-columns:1fr}
 }
 </style>
@@ -115,475 +164,627 @@ footer a{color:var(--accent);text-decoration:none}
 <body>
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-top"><a href="/" class="sidebar-logo">md<span>alamin</span></a><div class="sidebar-sub">Admin Panel</div></div>
-  <div class="nav-section"><div class="nav-label">Content</div>
-    <button class="nav-item active" onclick="showView('dashboard')">Dashboard</button>
-    <button class="nav-item" onclick="showView('articles')">Articles</button>
-    <button class="nav-item" onclick="showView('categories')">Categories</button>
-    <button class="nav-item" onclick="showView('notices')">Notices</button>
+  <div class="sidebar-top">
+    <a href="/" class="sidebar-logo">md<em>alamin</em></a>
+    <div class="sidebar-role" id="sidebarRole">Admin Panel</div>
   </div>
-  <div class="nav-section"><div class="nav-label">Management</div>
-    <button class="nav-item" onclick="showView('users')">Users</button>
-    <button class="nav-item" onclick="showView('homepage')">Homepage</button>
+  <div class="nav-section">
+    <div class="nav-group-label">Content</div>
+    <button class="nav-item active" onclick="showView('dashboard')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="showView('articles')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Articles
+    </button>
+    <button class="nav-item" onclick="showView('categories')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Categories
+    </button>
+    <button class="nav-item" onclick="showView('notices')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notices
+    </button>
   </div>
-  <div class="sidebar-footer"><span id="adminInfo"></span><button class="btn-logout" onclick="logout()">Sign Out</button></div>
+  <div class="nav-section" id="adminOnlyNav">
+    <div class="nav-group-label">Management</div>
+    <button class="nav-item" onclick="showView('users')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Users
+    </button>
+    <button class="nav-item" onclick="showView('homepage')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Homepage
+    </button>
+  </div>
+  <div class="sidebar-footer">
+    <div class="admin-info" id="adminInfoText"></div>
+    <button class="btn-logout" onclick="logout()">Sign Out</button>
+  </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px"><button class="menu-btn" onclick="toggleSidebar()">&#9776;</button><div class="topbar-title" id="topbarTitle">Dashboard</div></div>
-    <span class="admin-badge">Admin</span>
+    <div class="topbar-left">
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="topbar-title" id="topbarTitle">Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <a href="/" target="_blank" class="btn btn-ghost btn-sm">View Site</a>
+      <span class="role-badge" id="roleBadge">Admin</span>
+    </div>
   </div>
+
   <div class="content">
 
     <!-- DASHBOARD -->
-    <div class="view active" id="view-dashboard"><div class="stats" id="dashStats"></div></div>
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid" id="dashStats"></div>
+    </div>
 
     <!-- ARTICLES -->
     <div class="view" id="view-articles">
-      <div class="section-head"><div class="section-title">All Articles</div><button class="btn btn-primary" onclick="openArticleModal()">+ New Article</button></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Premium</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="articlesTbody"></tbody>
-      </table></div></div>
+      <div class="section-head">
+        <h2 class="section-title">Articles</h2>
+        <button class="btn btn-primary" onclick="openArticleModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Article
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Premium</th><th>Published</th><th>Actions</th></tr></thead>
+          <tbody id="articlesTbody"></tbody></table>
+        </div>
+      </div>
     </div>
 
     <!-- CATEGORIES -->
     <div class="view" id="view-categories">
-      <div class="section-head"><div class="section-title">Categories</div><button class="btn btn-primary" onclick="openCategoryModal()">+ New Category</button></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Name</th><th>Slug</th><th>Homepage</th><th>Actions</th></tr></thead>
-        <tbody id="categoriesTbody"></tbody>
-      </table></div></div>
+      <div class="section-head">
+        <h2 class="section-title">Categories</h2>
+        <button class="btn btn-primary" onclick="openCategoryModal()" id="newCatBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Category
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Slug</th><th>Shown on Homepage</th><th>Actions</th></tr></thead>
+          <tbody id="categoriesTbody"></tbody></table>
+        </div>
+      </div>
     </div>
 
     <!-- NOTICES -->
     <div class="view" id="view-notices">
-      <div class="section-head"><div class="section-title">Notices</div><button class="btn btn-primary" onclick="openNoticeModal()">+ New Notice</button></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Title</th><th>Active</th><th>Date</th><th>Actions</th></tr></thead>
-        <tbody id="noticesTbody"></tbody>
-      </table></div></div>
+      <div class="section-head">
+        <h2 class="section-title">Notices</h2>
+        <button class="btn btn-primary" id="newNoticeBtn" onclick="openNoticeModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Notice
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody id="noticesTbody"></tbody></table>
+        </div>
+      </div>
     </div>
 
-    <!-- USERS -->
+    <!-- USERS (admin only) -->
     <div class="view" id="view-users">
-      <div class="section-head"><div class="section-title">Users</div></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Membership</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="usersTbody"></tbody>
-      </table></div></div>
+      <div class="section-head"><h2 class="section-title">Users</h2></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Membership</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="usersTbody"></tbody></table>
+        </div>
+      </div>
     </div>
 
-    <!-- HOMEPAGE -->
+    <!-- HOMEPAGE (admin only) -->
     <div class="view" id="view-homepage">
-      <div class="section-head"><div class="section-title">Homepage Featured</div></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Title</th><th>Category</th><th>Actions</th></tr></thead>
-        <tbody id="featuredTbody"></tbody>
-      </table></div></div>
-      <div class="section-head" style="margin-top:24px"><div class="section-title">Add to Homepage</div></div>
-      <div class="card"><div class="card-body">
-        <div class="form-group"><label class="form-label">Select Article</label><select class="form-select" id="featuredSelect"><option value="">— Select —</option></select></div>
-        <button class="btn btn-primary" onclick="addFeatured()">Add to Homepage</button>
+      <div class="section-head"><h2 class="section-title">Homepage Featured</h2></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="featuredTbody"></tbody></table>
+        </div>
+      </div>
+      <div class="section-head" style="margin-top:24px"><h2 class="section-title">Add Article to Homepage</h2></div>
+      <div class="card"><div class="card-pad">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Select Published Article</label><select class="form-select" id="featuredSelect"><option value="">— Choose article —</option></select></div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:14px"><button class="btn btn-primary" onclick="addFeatured()">Add to Homepage</button></div>
+        </div>
       </div></div>
     </div>
 
   </div>
-  <footer><a href="/">Home</a> &middot; <a href="/contact.html">Contact</a><br>&copy; 2024 mdalamin</footer>
+  <footer><a href="/">View Site</a> &middot; <a href="/contact.html">Contact</a><br>&copy; 2024 mdalamin</footer>
 </main>
 
 <!-- ARTICLE MODAL -->
-<div class="modal-overlay" id="articleModal">
+<div class="modal-overlay" id="articleModal" onclick="if(event.target===this)closeArticleModal()">
   <div class="modal">
-    <button class="modal-close" onclick="closeArticleModal()">&times;</button>
-    <h3 id="articleModalTitle">New Article</h3>
-    <div class="alert" id="articleAlert" style="display:none"></div>
-    <input type="hidden" id="editArticleId">
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="artTitle"></div>
-      <div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="artSlug" placeholder="auto-generated"><span class="form-hint">Leave empty to auto-generate</span></div>
+    <div class="modal-head">
+      <h3 id="artModalTitle">New Article</h3>
+      <button class="modal-close" onclick="closeArticleModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="artCategory"><option value="">— None —</option></select></div>
-      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="artStatus"><option value="draft">Draft</option><option value="published">Published</option><option value="scheduled">Scheduled</option><option value="archived">Archived</option></select></div>
+    <div class="modal-body">
+      <div class="alert" id="artAlert"></div>
+      <input type="hidden" id="artId">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="artTitle" placeholder="Article title"></div>
+        <div class="form-group"><label class="form-label">Slug <span style="font-weight:400;text-transform:none">(auto)</span></label><input class="form-input" id="artSlug" placeholder="auto-generated"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="artCategory"><option value="">— None —</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label>
+          <select class="form-select" id="artStatus">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Excerpt</label><textarea class="form-textarea" id="artExcerpt" style="min-height:56px" placeholder="Brief summary (2–3 sentences)…"></textarea></div>
+      <div class="form-group"><label class="form-label">Body — HTML Supported *</label><textarea class="form-textarea code" id="artBody" style="min-height:200px" placeholder="&lt;h2&gt;Introduction&lt;/h2&gt;&#10;&lt;p&gt;Your article content...&lt;/p&gt;"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Featured Image URL</label><input class="form-input" id="artImage" placeholder="https://..."><div class="form-hint">Paste URL or upload below</div></div>
+        <div class="form-group"><label class="form-label">Schedule Date</label><input class="form-input" type="datetime-local" id="artSchedule"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="display:flex;align-items:center;padding-top:6px"><label class="toggle-row"><input type="checkbox" id="artPremium"><span>Mark as Premium content</span></label></div>
+        <div class="form-group"><button class="btn btn-ghost btn-sm" onclick="uploadImage()" style="margin-top:6px">Upload Image (ImgBB)</button></div>
+      </div>
+      <div id="uploadResultWrap"></div>
     </div>
-    <div class="form-group"><label class="form-label">Excerpt</label><textarea class="form-textarea" id="artExcerpt" style="min-height:60px" placeholder="Short summary..."></textarea></div>
-    <div class="form-group"><label class="form-label">Body (HTML supported) *</label><textarea class="form-textarea" id="artBody" style="min-height:200px;font-family:monospace;font-size:0.8rem" placeholder="<h2>Heading</h2><p>Content...</p>"></textarea></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Featured Image URL</label><input class="form-input" id="artImage" placeholder="https://..."></div>
-      <div class="form-group"><label class="form-label">Schedule Date</label><input class="form-input" type="datetime-local" id="artSchedule"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveArticle()">Save Article</button>
+      <button class="btn btn-ghost" onclick="closeArticleModal()">Cancel</button>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="toggle-label"><input type="checkbox" id="artPremium"><span>Premium content</span></label></div>
-      <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-ghost btn-sm" onclick="uploadImage()">Upload Image to ImgBB</button></div>
-    </div>
-    <div class="form-group" id="imageUploadResult" style="display:none"></div>
-    <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="saveArticle()">Save Article</button><button class="btn btn-ghost" onclick="closeArticleModal()">Cancel</button></div>
   </div>
 </div>
 
 <!-- CATEGORY MODAL -->
-<div class="modal-overlay" id="categoryModal">
-  <div class="modal" style="max-width:460px">
-    <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
-    <h3 id="categoryModalTitle">New Category</h3>
-    <div class="alert" id="categoryAlert" style="display:none"></div>
-    <input type="hidden" id="editCategoryId">
-    <div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="catName"></div>
-    <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="catDesc"></div>
-    <div class="form-group"><label class="toggle-label"><input type="checkbox" id="catShowHome" checked><span>Show on homepage</span></label></div>
-    <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="saveCategory()">Save</button><button class="btn btn-ghost" onclick="closeCategoryModal()">Cancel</button></div>
+<div class="modal-overlay" id="categoryModal" onclick="if(event.target===this)closeCategoryModal()">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3 id="catModalTitle">New Category</h3><button class="modal-close" onclick="closeCategoryModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert" id="catAlert"></div>
+      <input type="hidden" id="catId">
+      <div class="form-group"><label class="form-label">Category Name *</label><input class="form-input" id="catName" placeholder="e.g. Academic"></div>
+      <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="catDesc" placeholder="Brief description…"></div>
+      <div class="form-group"><label class="toggle-row"><input type="checkbox" id="catShow" checked><span>Show in homepage category bar</span></label></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveCategory()">Save Category</button>
+      <button class="btn btn-ghost" onclick="closeCategoryModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
 <!-- NOTICE MODAL -->
-<div class="modal-overlay" id="noticeModal">
-  <div class="modal" style="max-width:500px">
-    <button class="modal-close" onclick="closeNoticeModal()">&times;</button>
-    <h3 id="noticeModalTitle">New Notice</h3>
-    <div class="alert" id="noticeAlert" style="display:none"></div>
-    <input type="hidden" id="editNoticeId">
-    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="noticeTitle"></div>
-    <div class="form-group"><label class="form-label">Body</label><textarea class="form-textarea" id="noticeBody" style="min-height:80px"></textarea></div>
-    <div class="form-group"><label class="form-label">Image URL</label><input class="form-input" id="noticeImage"></div>
-    <div class="form-group"><label class="toggle-label"><input type="checkbox" id="noticeActive" checked><span>Active</span></label></div>
-    <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="saveNotice()">Save</button><button class="btn btn-ghost" onclick="closeNoticeModal()">Cancel</button></div>
+<div class="modal-overlay" id="noticeModal" onclick="if(event.target===this)closeNoticeModal()">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><h3 id="notModalTitle">New Notice</h3><button class="modal-close" onclick="closeNoticeModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert" id="notAlert"></div>
+      <input type="hidden" id="notId">
+      <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="notTitle"></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="notBody" style="min-height:80px"></textarea></div>
+      <div class="form-group"><label class="form-label">Image URL (optional)</label><input class="form-input" id="notImage" placeholder="https://…"></div>
+      <div class="form-group"><label class="toggle-row"><input type="checkbox" id="notActive" checked><span>Mark as Active</span></label></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveNotice()">Save Notice</button>
+      <button class="btn btn-ghost" onclick="closeNoticeModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
 <!-- MEMBERSHIP MODAL -->
-<div class="modal-overlay" id="membershipModal">
-  <div class="modal" style="max-width:440px">
-    <button class="modal-close" onclick="closeMembershipModal()">&times;</button>
-    <h3>Grant Membership</h3>
-    <div class="alert" id="membershipAlert" style="display:none"></div>
-    <input type="hidden" id="membershipUserId">
-    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:14px">Granting to: <strong id="membershipUserName"></strong></p>
-    <div class="form-group"><label class="form-label">Membership Type</label><select class="form-select" id="membershipType"><option value="monthly">Monthly (100 BDT)</option><option value="monthly_max">Monthly Max (200 BDT)</option><option value="yearly">Yearly (1200 BDT)</option></select></div>
-    <div class="form-group"><label class="form-label">Duration (days)</label><input class="form-input" type="number" id="membershipDays" value="30" min="1" max="3650"></div>
-    <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeMembershipModal()">Cancel</button></div>
+<div class="modal-overlay" id="membershipModal" onclick="if(event.target===this)closeMembershipModal()">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head"><h3>Grant Membership</h3><button class="modal-close" onclick="closeMembershipModal()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert" id="memAlert"></div>
+      <input type="hidden" id="memUserId">
+      <p style="font-size:.84rem;color:var(--muted);margin-bottom:16px">Granting membership to: <strong id="memUserName" style="color:var(--ink)"></strong></p>
+      <div class="form-group"><label class="form-label">Membership Type</label>
+        <select class="form-select" id="memType" onchange="updateDays()">
+          <option value="free">Free (revoke)</option>
+          <option value="monthly">Monthly — 100 BDT</option>
+          <option value="monthly_max">Monthly Max — 200 BDT</option>
+          <option value="yearly">Yearly — 1200 BDT</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Duration (days)</label><input class="form-input" type="number" id="memDays" value="30" min="1" max="3650"></div>
+      <div class="form-group" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:.76rem;color:var(--muted)">Expires: <strong id="memExpiryPreview" style="color:var(--ink)">—</strong></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="grantMembership()">Grant Membership</button>
+      <button class="btn btn-ghost" onclick="closeMembershipModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
 <script>
-const token=localStorage.getItem('blog_token');
-const user=JSON.parse(localStorage.getItem('blog_user')||'null');
-if(!token||!user||user.role==='user')window.location.href='/';
-document.getElementById('adminInfo').textContent=user.email;
-const isAdmin=user.role==='admin';
+const token = localStorage.getItem('blog_token');
+const user = JSON.parse(localStorage.getItem('blog_user') || 'null');
+if (!token || !user || user.role === 'user') { window.location.href = '/'; }
 
-let allCategories=[],allArticles=[];
+const isAdmin = user.role === 'admin';
+let allArticles = [], allCategories = [];
 
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
-function logout(){localStorage.clear();window.location.href='/'}
+// Setup UI
+document.getElementById('adminInfoText').textContent = user.email;
+document.getElementById('sidebarRole').textContent = isAdmin ? 'Admin Panel' : 'Moderator Panel';
+document.getElementById('roleBadge').textContent = isAdmin ? 'Admin' : 'Moderator';
+document.getElementById('roleBadge').className = 'role-badge ' + (isAdmin ? 'role-admin' : 'role-mod');
+if (!isAdmin) document.getElementById('adminOnlyNav').style.display = 'none';
 
-const viewTitles={dashboard:'Dashboard',articles:'Articles',categories:'Categories',notices:'Notices',users:'Users',homepage:'Homepage'};
+/* ─── NAVIGATION ─── */
+const viewTitles = { dashboard:'Dashboard', articles:'Articles', categories:'Categories', notices:'Notices', users:'Users', homepage:'Homepage' };
 
-function showView(id){
+function showView(id) {
+  if ((id==='users'||id==='homepage') && !isAdmin) { alert('Admin access required'); return; }
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(id))b.classList.add('active')});
-  document.getElementById('topbarTitle').textContent=viewTitles[id]||id;
+  // Highlight correct nav item (match by data or text)
+  document.querySelectorAll('.nav-item').forEach(b => {
+    const t = b.textContent.trim().toLowerCase();
+    if (t.includes(id.slice(0,5))) b.classList.add('active');
+  });
+  document.getElementById('topbarTitle').textContent = viewTitles[id] || id;
   document.getElementById('sidebar').classList.remove('open');
-  if(id==='dashboard')loadDashboard();
-  if(id==='articles')loadArticles();
-  if(id==='categories')loadCategoriesAdmin();
-  if(id==='notices')loadNotices();
-  if(id==='users'&&isAdmin)loadUsers();
-  if(id==='homepage'&&isAdmin)loadFeatured();
-  if(id==='users'&&!isAdmin){alert('Only admin can access this');showView('dashboard')}
-  if(id==='homepage'&&!isAdmin){alert('Only admin can access this');showView('dashboard')}
+  if (id==='dashboard') loadDashboard();
+  if (id==='articles') loadArticles();
+  if (id==='categories') loadCategoriesAdmin();
+  if (id==='notices') loadNotices();
+  if (id==='users') loadUsers();
+  if (id==='homepage') loadHomepage();
 }
 
-async function api(method,path,body){
-  const opts={method,headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`}};
-  if(body)opts.body=JSON.stringify(body);
-  const res=await fetch('/api'+path,opts);
-  const data=await res.json();
-  return{ok:res.ok,data};
+function logout() { localStorage.clear(); window.location.href = '/'; }
+
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch('/api' + path, opts);
+  const data = await res.json();
+  return { ok: res.ok, data, status: res.status };
 }
 
-async function loadDashboard(){
-  const[artRes,catRes,userRes,noticeRes]=await Promise.all([
-    api('GET','/admin/articles'),api('GET','/admin/categories'),
-    isAdmin?api('GET','/admin/users'):{ok:true,data:[]},api('GET','/admin/notices')
+/* ─── DASHBOARD ─── */
+async function loadDashboard() {
+  const [artR, catR, usrR, notR] = await Promise.all([
+    api('GET','/admin/articles'), api('GET','/admin/categories'),
+    isAdmin ? api('GET','/admin/users') : Promise.resolve({ok:true,data:[]}),
+    api('GET','/admin/notices')
   ]);
-  const arts=artRes.ok?artRes.data:[];allArticles=arts;
-  const cats=catRes.ok?catRes.data:[];allCategories=cats;
-  const users=userRes.ok?userRes.data:[];
-  const notices=noticeRes.ok?noticeRes.data:[];
-  const published=arts.filter(a=>a.status==='published').length;
-  const drafts=arts.filter(a=>a.status==='draft').length;
-  const archived=arts.filter(a=>a.status==='archived').length;
-  const premium=arts.filter(a=>a.is_premium).length;
-  document.getElementById('dashStats').innerHTML=`
-    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${arts.length}</div></div>
-    <div class="stat"><div class="stat-label">Published</div><div class="stat-val">${published}</div></div>
-    <div class="stat"><div class="stat-label">Drafts</div><div class="stat-val">${drafts}</div></div>
-    <div class="stat"><div class="stat-label">Archived</div><div class="stat-val">${archived}</div></div>
-    <div class="stat"><div class="stat-label">Premium</div><div class="stat-val">${premium}</div></div>
-    <div class="stat"><div class="stat-label">Categories</div><div class="stat-val">${cats.length}</div></div>
-    ${isAdmin?`<div class="stat"><div class="stat-label">Users</div><div class="stat-val">${users.length}</div></div>`:''}
-    <div class="stat"><div class="stat-label">Notices</div><div class="stat-val">${notices.length}</div></div>
-  `;
+  const arts = artR.ok ? artR.data : []; allArticles = arts;
+  const cats = catR.ok ? catR.data : []; allCategories = cats;
+  const users = usrR.ok ? usrR.data : [];
+  const notices = notR.ok ? notR.data : [];
+  const pub = arts.filter(a=>a.status==='published').length;
+  const draft = arts.filter(a=>a.status==='draft').length;
+  const arc = arts.filter(a=>a.status==='archived').length;
+  const prem = arts.filter(a=>a.is_premium).length;
+  document.getElementById('dashStats').innerHTML = [
+    ['Total Articles', arts.length, ''],
+    ['Published', pub, 'green'],
+    ['Drafts', draft, ''],
+    ['Archived', arc, ''],
+    ['Premium', prem, 'gold'],
+    ['Categories', cats.length, ''],
+    ...(isAdmin ? [['Total Users', users.length, '']] : []),
+    ['Active Notices', notices.filter(n=>n.is_active).length, ''],
+  ].map(([label, val, cls]) => `<div class="stat-card ${cls}"><div class="stat-label">${label}</div><div class="stat-val">${val}</div></div>`).join('');
 }
 
-// ═══ ARTICLES ═══
-async function loadArticles(){
-  const{ok,data}=await api('GET','/admin/articles');allArticles=ok?data:[];
-  const tbody=document.getElementById('articlesTbody');
-  if(!allArticles.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No articles yet.</td></tr>';return}
-  tbody.innerHTML=allArticles.map(a=>`<tr>
-    <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.title)}</td>
+/* ─── ARTICLES ─── */
+async function loadArticles() {
+  const { ok, data } = await api('GET', '/admin/articles');
+  allArticles = ok ? data : [];
+  const tbody = document.getElementById('articlesTbody');
+  if (!allArticles.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">No articles yet.</td></tr>'; return; }
+  tbody.innerHTML = allArticles.map(a => `<tr>
+    <td class="td-title" title="${esc(a.title)}">${esc(a.title)}</td>
     <td>${esc(a.category_name||'—')}</td>
-    <td><span class="badge badge-${a.status==='archived'?'archived':a.status}">${a.status}</span></td>
-    <td>${a.is_premium?'<span class="badge badge-premium">Premium</span>':'<span class="badge badge-free">Free</span>'}</td>
-    <td style="font-size:0.72rem">${a.published_at?new Date(a.published_at).toLocaleDateString():'—'}</td>
+    <td style="font-size:.74rem">${esc(a.author_name||'—')}</td>
+    <td><span class="badge b-${a.status}">${a.status}</span></td>
+    <td>${a.is_premium?'<span class="badge b-premium">Premium</span>':'<span class="badge b-free">Free</span>'}</td>
+    <td style="font-size:.72rem;font-family:'DM Mono',monospace">${a.published_at?new Date(a.published_at).toLocaleDateString():'—'}</td>
     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-xs" onclick="editArticle(${a.id})">Edit</button>
-      <button class="btn btn-danger btn-xs" onclick="deleteArticle(${a.id})">Del</button>
+      <button class="btn btn-danger btn-xs" onclick="deleteArticle(${a.id})">Delete</button>
     </div></td></tr>`).join('');
 }
 
-function openArticleModal(id=null){
-  document.getElementById('articleAlert').style.display='none';
-  if(id){editArticle(id);return}
-  document.getElementById('articleModalTitle').textContent='New Article';
-  document.getElementById('editArticleId').value='';
-  document.getElementById('artTitle').value='';document.getElementById('artSlug').value='';
-  document.getElementById('artExcerpt').value='';document.getElementById('artBody').value='';
-  document.getElementById('artImage').value='';document.getElementById('artSchedule').value='';
-  document.getElementById('artPremium').checked=false;document.getElementById('artStatus').value='draft';
-  loadCategoriesSelect();document.getElementById('articleModal').classList.add('open');
+function openArticleModal() {
+  document.getElementById('artId').value = '';
+  document.getElementById('artModalTitle').textContent = 'New Article';
+  document.getElementById('artTitle').value = ''; document.getElementById('artSlug').value = '';
+  document.getElementById('artExcerpt').value = ''; document.getElementById('artBody').value = '';
+  document.getElementById('artImage').value = ''; document.getElementById('artSchedule').value = '';
+  document.getElementById('artPremium').checked = false; document.getElementById('artStatus').value = 'draft';
+  document.getElementById('artAlert').className = 'alert'; document.getElementById('uploadResultWrap').innerHTML = '';
+  loadCatSelect(); document.getElementById('articleModal').classList.add('open');
 }
 
-async function editArticle(id){
-  const a=allArticles.find(x=>x.id===id);if(!a)return;
-  document.getElementById('articleModalTitle').textContent='Edit Article';
-  document.getElementById('editArticleId').value=a.id;
-  document.getElementById('artTitle').value=a.title||'';
-  document.getElementById('artSlug').value=a.slug||'';
-  document.getElementById('artExcerpt').value=a.excerpt||'';
-  document.getElementById('artBody').value=a.body||'';
-  document.getElementById('artImage').value=a.featured_image||'';
-  document.getElementById('artSchedule').value=a.scheduled_at?a.scheduled_at.substring(0,16):'';
-  document.getElementById('artPremium').checked=!!a.is_premium;
-  document.getElementById('artStatus').value=a.status||'draft';
-  loadCategoriesSelect(a.category_id);
-  document.getElementById('articleModal').classList.add('open');
+function editArticle(id) {
+  const a = allArticles.find(x=>x.id===id); if (!a) return;
+  document.getElementById('artId').value = a.id;
+  document.getElementById('artModalTitle').textContent = 'Edit Article';
+  document.getElementById('artTitle').value = a.title||''; document.getElementById('artSlug').value = a.slug||'';
+  document.getElementById('artExcerpt').value = a.excerpt||''; document.getElementById('artBody').value = a.body||'';
+  document.getElementById('artImage').value = a.featured_image||'';
+  document.getElementById('artSchedule').value = a.scheduled_at ? a.scheduled_at.substring(0,16) : '';
+  document.getElementById('artPremium').checked = !!a.is_premium; document.getElementById('artStatus').value = a.status||'draft';
+  document.getElementById('artAlert').className = 'alert'; document.getElementById('uploadResultWrap').innerHTML = '';
+  loadCatSelect(a.category_id); document.getElementById('articleModal').classList.add('open');
 }
 
-function closeArticleModal(){document.getElementById('articleModal').classList.remove('open')}
+function closeArticleModal() { document.getElementById('articleModal').classList.remove('open'); }
 
-async function saveArticle(){
-  const id=document.getElementById('editArticleId').value;
-  const title=document.getElementById('artTitle').value.trim();
-  const slug=document.getElementById('artSlug').value.trim()||null;
-  const excerpt=document.getElementById('artExcerpt').value.trim();
-  const body=document.getElementById('artBody').value.trim();
-  const category_id=document.getElementById('artCategory').value||null;
-  const featured_image=document.getElementById('artImage').value.trim()||null;
-  const is_premium=document.getElementById('artPremium').checked;
-  const status=document.getElementById('artStatus').value;
-  const scheduled_at=document.getElementById('artSchedule').value||null;
-  const alertEl=document.getElementById('articleAlert');
-  if(!title||!body){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent='Title and body required';return}
-  alertEl.style.display='none';
-  const payload={title,slug,excerpt,body,category_id:category_id?parseInt(category_id):null,featured_image,is_premium,status,scheduled_at};
-  const method=id?'PUT':'POST';
-  const path=id?`/admin/articles/${id}`:'/admin/articles';
-  const{ok,data}=await api(method,path,payload);
-  if(!ok){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent=data.error;return}
-  closeArticleModal();loadArticles();loadDashboard();
+function loadCatSelect(selected = null) {
+  document.getElementById('artCategory').innerHTML = '<option value="">— None —</option>'
+    + allCategories.map(c => `<option value="${c.id}" ${selected==c.id?'selected':''}>${esc(c.name)}</option>`).join('');
 }
 
-async function deleteArticle(id){if(!confirm('Delete this article?'))return;await api('DELETE',`/admin/articles/${id}`);loadArticles();loadDashboard();}
-
-function loadCategoriesSelect(selected=null){
-  const sel=document.getElementById('artCategory');
-  sel.innerHTML='<option value="">— None —</option>'+allCategories.map(c=>`<option value="${c.id}" ${selected==c.id?'selected':''}>${esc(c.name)}</option>`).join('');
+async function saveArticle() {
+  const id = document.getElementById('artId').value;
+  const alertEl = document.getElementById('artAlert');
+  const payload = {
+    title: document.getElementById('artTitle').value.trim(),
+    slug: document.getElementById('artSlug').value.trim() || null,
+    excerpt: document.getElementById('artExcerpt').value.trim(),
+    body: document.getElementById('artBody').value.trim(),
+    category_id: document.getElementById('artCategory').value ? parseInt(document.getElementById('artCategory').value) : null,
+    featured_image: document.getElementById('artImage').value.trim() || null,
+    is_premium: document.getElementById('artPremium').checked,
+    status: document.getElementById('artStatus').value,
+    scheduled_at: document.getElementById('artSchedule').value || null,
+  };
+  if (!payload.title || !payload.body) { alertEl.className='alert alert-error show'; alertEl.textContent='Title and body are required.'; return; }
+  alertEl.className = 'alert';
+  const { ok, data } = await api(id?'PUT':'POST', id?`/admin/articles/${id}`:'/admin/articles', payload);
+  if (!ok) { alertEl.className='alert alert-error show'; alertEl.textContent=data.error; return; }
+  closeArticleModal(); loadArticles(); if(document.getElementById('view-dashboard').classList.contains('active')) loadDashboard();
 }
 
-async function uploadImage(){
-  const fileInput=document.createElement('input');fileInput.type='file';fileInput.accept='image/*';
-  fileInput.onchange=async function(){
-    const file=this.files[0];if(!file)return;
-    const reader=new FileReader();
-    reader.onload=async function(e){
-      const base64=e.target.result.split(',')[1];
-      const{ok,data}=await api('POST','/admin/upload-image',{image:base64});
-      const resultEl=document.getElementById('imageUploadResult');
-      if(ok){resultEl.style.display='block';resultEl.innerHTML=`<div class="alert alert-success">Uploaded! <input class="form-input" value="${data.url}" onclick="this.select()" style="width:100%;font-size:0.75rem;margin-top:4px" readonly></div>`;document.getElementById('artImage').value=data.url;}
-      else{resultEl.style.display='block';resultEl.innerHTML='<div class="alert alert-error">Upload failed</div>';}
-    };reader.readAsDataURL(file);
-  };fileInput.click();
+async function deleteArticle(id) {
+  if (!confirm('Permanently delete this article? This cannot be undone.')) return;
+  await api('DELETE', `/admin/articles/${id}`);
+  loadArticles();
 }
 
-// ═══ CATEGORIES ═══
-async function loadCategoriesAdmin(){
-  const{ok,data}=await api('GET','/admin/categories');allCategories=ok?data:[];
-  const tbody=document.getElementById('categoriesTbody');
-  if(!allCategories.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--muted)">No categories.</td></tr>';return}
-  tbody.innerHTML=allCategories.map(c=>`<tr><td style="font-weight:500">${esc(c.name)}</td><td>${c.slug}</td><td>${c.show_on_homepage?'Yes':'—'}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editCategory(${c.id})">Edit</button>${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteCategory(${c.id})">Del</button>`:''}</div></td></tr>`).join('');
+async function uploadImage() {
+  const input = document.createElement('input'); input.type='file'; input.accept='image/*';
+  input.onchange = async () => {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const base64 = e.target.result.split(',')[1];
+      document.getElementById('uploadResultWrap').innerHTML = '<div class="upload-result">Uploading…</div>';
+      const { ok, data } = await api('POST', '/admin/upload-image', { image: base64 });
+      if (ok) {
+        document.getElementById('artImage').value = data.url;
+        document.getElementById('uploadResultWrap').innerHTML = `<div class="upload-result" style="color:var(--success)">✓ Uploaded — <a href="${data.url}" target="_blank" style="color:var(--accent)">${data.url.substring(0,60)}…</a></div>`;
+      } else {
+        document.getElementById('uploadResultWrap').innerHTML = `<div class="upload-result" style="color:var(--error)">Upload failed: ${data.error}</div>`;
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
 }
 
-function openCategoryModal(id=null){
-  document.getElementById('categoryAlert').style.display='none';
-  if(id){editCategory(id);return}
-  document.getElementById('categoryModalTitle').textContent='New Category';
-  document.getElementById('editCategoryId').value='';
-  document.getElementById('catName').value='';document.getElementById('catDesc').value='';
-  document.getElementById('catShowHome').checked=true;
+/* ─── CATEGORIES ─── */
+async function loadCategoriesAdmin() {
+  const { ok, data } = await api('GET', '/admin/categories');
+  allCategories = ok ? data : [];
+  const tbody = document.getElementById('categoriesTbody');
+  if (!allCategories.length) { tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No categories.</td></tr>'; return; }
+  tbody.innerHTML = allCategories.map(c=>`<tr>
+    <td style="font-weight:600">${esc(c.name)}</td>
+    <td style="font-family:'DM Mono',monospace;font-size:.76rem">${c.slug}</td>
+    <td>${c.show_on_homepage?'<span class="badge b-active">Yes</span>':'<span class="badge b-draft">No</span>'}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn-ghost btn-xs" onclick="editCategory(${c.id})">Edit</button>
+      ${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteCategory(${c.id})">Delete</button>`:''}
+    </div></td></tr>`).join('');
+}
+
+function openCategoryModal() {
+  document.getElementById('catId').value=''; document.getElementById('catModalTitle').textContent='New Category';
+  document.getElementById('catName').value=''; document.getElementById('catDesc').value='';
+  document.getElementById('catShow').checked=true; document.getElementById('catAlert').className='alert';
   document.getElementById('categoryModal').classList.add('open');
 }
 
-function editCategory(id){
-  const c=allCategories.find(x=>x.id===id);if(!c)return;
-  document.getElementById('categoryModalTitle').textContent='Edit Category';
-  document.getElementById('editCategoryId').value=c.id;
-  document.getElementById('catName').value=c.name;document.getElementById('catDesc').value=c.description||'';
-  document.getElementById('catShowHome').checked=!!c.show_on_homepage;
+function editCategory(id) {
+  const c = allCategories.find(x=>x.id===id); if (!c) return;
+  document.getElementById('catId').value=c.id; document.getElementById('catModalTitle').textContent='Edit Category';
+  document.getElementById('catName').value=c.name; document.getElementById('catDesc').value=c.description||'';
+  document.getElementById('catShow').checked=!!c.show_on_homepage; document.getElementById('catAlert').className='alert';
   document.getElementById('categoryModal').classList.add('open');
 }
 
-function closeCategoryModal(){document.getElementById('categoryModal').classList.remove('open')}
+function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('open'); }
 
-async function saveCategory(){
-  const id=document.getElementById('editCategoryId').value;
+async function saveCategory() {
+  const id=document.getElementById('catId').value;
   const name=document.getElementById('catName').value.trim();
   const description=document.getElementById('catDesc').value.trim();
-  const show_on_homepage=document.getElementById('catShowHome').checked?1:0;
-  const alertEl=document.getElementById('categoryAlert');
-  if(!name){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent='Name required';return}
-  const method=id?'PUT':'POST';
-  const path=id?`/admin/categories/${id}`:'/admin/categories';
-  const{ok,data}=await api(method,path,{name,description,show_on_homepage});
-  if(!ok){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent=data.error;return}
-  closeCategoryModal();loadCategoriesAdmin();loadDashboard();
+  const show_on_homepage=document.getElementById('catShow').checked?1:0;
+  const alertEl=document.getElementById('catAlert');
+  if (!name) { alertEl.className='alert alert-error show'; alertEl.textContent='Category name is required.'; return; }
+  const { ok, data } = await api(id?'PUT':'POST', id?`/admin/categories/${id}`:'/admin/categories', {name,description,show_on_homepage});
+  if (!ok) { alertEl.className='alert alert-error show'; alertEl.textContent=data.error; return; }
+  closeCategoryModal(); loadCategoriesAdmin();
 }
 
-async function deleteCategory(id){if(!confirm('Delete this category?'))return;await api('DELETE',`/admin/categories/${id}`);loadCategoriesAdmin();loadDashboard();}
-
-// ═══ NOTICES ═══
-async function loadNotices(){
-  const{ok,data}=await api('GET','/admin/notices');
-  const tbody=document.getElementById('noticesTbody');
-  if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--muted)">No notices.</td></tr>';return}
-  tbody.innerHTML=data.map(n=>`<tr><td style="font-weight:500">${esc(n.title)}</td><td>${n.is_active?'Active':'—'}</td><td style="font-size:0.72rem">${new Date(n.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editNotice(${n.id})">Edit</button>${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteNotice(${n.id})">Del</button>`:''}</div></td></tr>`).join('');
+async function deleteCategory(id) {
+  if (!confirm('Delete this category? Articles in it will become uncategorized.')) return;
+  await api('DELETE', `/admin/categories/${id}`); loadCategoriesAdmin();
 }
 
-function openNoticeModal(id=null){
-  document.getElementById('noticeAlert').style.display='none';
-  if(id){editNotice(id);return}
-  document.getElementById('noticeModalTitle').textContent='New Notice';
-  document.getElementById('editNoticeId').value='';
-  document.getElementById('noticeTitle').value='';document.getElementById('noticeBody').value='';document.getElementById('noticeImage').value='';
-  document.getElementById('noticeActive').checked=true;
+/* ─── NOTICES ─── */
+let allNotices = [];
+async function loadNotices() {
+  const { ok, data } = await api('GET', '/admin/notices');
+  allNotices = ok ? data : [];
+  const tbody = document.getElementById('noticesTbody');
+  if (!allNotices.length) { tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No notices.</td></tr>'; return; }
+  tbody.innerHTML = allNotices.map(n=>`<tr>
+    <td style="font-weight:600">${esc(n.title)}</td>
+    <td>${n.is_active?'<span class="badge b-active">Active</span>':'<span class="badge b-draft">Inactive</span>'}</td>
+    <td style="font-family:'DM Mono',monospace;font-size:.72rem">${new Date(n.created_at).toLocaleDateString()}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn btn-ghost btn-xs" onclick="editNotice(${n.id})">Edit</button>
+      ${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteNotice(${n.id})">Delete</button>`:''}
+    </div></td></tr>`).join('');
+}
+
+function openNoticeModal() {
+  document.getElementById('notId').value=''; document.getElementById('notModalTitle').textContent='New Notice';
+  document.getElementById('notTitle').value=''; document.getElementById('notBody').value=''; document.getElementById('notImage').value='';
+  document.getElementById('notActive').checked=true; document.getElementById('notAlert').className='alert';
   document.getElementById('noticeModal').classList.add('open');
 }
 
-function editNotice(id){
-  fetch(`/api/admin/notices`,{headers:{Authorization:`Bearer ${token}`}}).then(r=>r.json()).then(data=>{
-    const n=data.find(x=>x.id===id);if(!n)return;
-    document.getElementById('noticeModalTitle').textContent='Edit Notice';
-    document.getElementById('editNoticeId').value=n.id;
-    document.getElementById('noticeTitle').value=n.title;document.getElementById('noticeBody').value=n.body||'';
-    document.getElementById('noticeImage').value=n.image_url||'';
-    document.getElementById('noticeActive').checked=!!n.is_active;
-    document.getElementById('noticeModal').classList.add('open');
-  });
+function editNotice(id) {
+  const n = allNotices.find(x=>x.id===id); if (!n) return;
+  document.getElementById('notId').value=n.id; document.getElementById('notModalTitle').textContent='Edit Notice';
+  document.getElementById('notTitle').value=n.title; document.getElementById('notBody').value=n.body||'';
+  document.getElementById('notImage').value=n.image_url||''; document.getElementById('notActive').checked=!!n.is_active;
+  document.getElementById('notAlert').className='alert';
+  document.getElementById('noticeModal').classList.add('open');
 }
 
-function closeNoticeModal(){document.getElementById('noticeModal').classList.remove('open')}
+function closeNoticeModal() { document.getElementById('noticeModal').classList.remove('open'); }
 
-async function saveNotice(){
-  const id=document.getElementById('editNoticeId').value;
-  const title=document.getElementById('noticeTitle').value.trim();
-  const body=document.getElementById('noticeBody').value.trim();
-  const image_url=document.getElementById('noticeImage').value.trim()||null;
-  const is_active=document.getElementById('noticeActive').checked?1:0;
-  const alertEl=document.getElementById('noticeAlert');
-  if(!title){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent='Title required';return}
-  const method=id?'PUT':'POST';
-  const path=id?`/admin/notices/${id}`:'/admin/notices';
-  const{ok,data}=await api(method,path,{title,body,image_url,is_active});
-  if(!ok){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent=data.error;return}
-  closeNoticeModal();loadNotices();loadDashboard();
+async function saveNotice() {
+  const id=document.getElementById('notId').value;
+  const title=document.getElementById('notTitle').value.trim();
+  const body=document.getElementById('notBody').value.trim();
+  const image_url=document.getElementById('notImage').value.trim()||null;
+  const is_active=document.getElementById('notActive').checked?1:0;
+  const alertEl=document.getElementById('notAlert');
+  if (!title) { alertEl.className='alert alert-error show'; alertEl.textContent='Title is required.'; return; }
+  const { ok, data } = await api(id?'PUT':'POST', id?`/admin/notices/${id}`:'/admin/notices', {title,body,image_url,is_active});
+  if (!ok) { alertEl.className='alert alert-error show'; alertEl.textContent=data.error; return; }
+  closeNoticeModal(); loadNotices();
 }
 
-async function deleteNotice(id){if(!confirm('Delete this notice?'))return;await api('DELETE',`/admin/notices/${id}`);loadNotices();loadDashboard();}
+async function deleteNotice(id) {
+  if (!confirm('Delete this notice?')) return;
+  await api('DELETE', `/admin/notices/${id}`); loadNotices();
+}
 
-// ═══ USERS ═══
-async function loadUsers(){
-  const{ok,data}=await api('GET','/admin/users');
-  const tbody=document.getElementById('usersTbody');
-  if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No users.</td></tr>';return}
-  tbody.innerHTML=data.map(u=>`<tr>
-    <td style="font-weight:500">${esc(u.name)}</td><td style="font-size:0.75rem">${esc(u.email)}</td>
-    <td><span class="badge ${u.role==='admin'?'badge-premium':'badge-free'}">${u.role}</span></td>
-    <td><span class="badge ${u.membership_type!=='free'?'badge-premium':'badge-free'}">${u.membership_type}</span>${u.membership_expires?` <small style="color:var(--muted)">${new Date(u.membership_expires).toLocaleDateString()}</small>`:''}</td>
-    <td>${u.is_blocked?'<span class="badge badge-blocked">Blocked</span>':'<span class="badge badge-free">Active</span>'}</td>
+/* ─── USERS ─── */
+async function loadUsers() {
+  const { ok, data } = await api('GET', '/admin/users');
+  const tbody = document.getElementById('usersTbody');
+  if (!ok||!data.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">No users.</td></tr>'; return; }
+  tbody.innerHTML = data.map(u=>`<tr>
+    <td style="font-weight:600">${esc(u.name)}</td>
+    <td style="font-size:.74rem;font-family:'DM Mono',monospace">${esc(u.email)}</td>
+    <td><span class="badge b-${u.role}">${u.role}</span></td>
+    <td><span class="badge ${u.membership_type!=='free'?'b-premium':'b-draft'}">${u.membership_type}</span></td>
+    <td style="font-size:.7rem;font-family:'DM Mono',monospace">${u.membership_expires?new Date(u.membership_expires).toLocaleDateString():'—'}</td>
+    <td>${u.is_blocked?'<span class="badge b-blocked">Blocked</span>':'<span class="badge b-active">Active</span>'}</td>
     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
-      <button class="btn btn-success btn-xs" onclick="openMembershipModal(${u.id},'${esc(u.name)}')">Grant</button>
+      <button class="btn btn-gold btn-xs" onclick="openMembershipModal(${u.id},'${esc(u.name)}','${u.membership_type}')">Membership</button>
       <button class="btn btn-ghost btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button>
       ${u.role!=='admin'?`<button class="btn btn-ghost btn-xs" onclick="changeRole(${u.id},'${u.role==='moderator'?'user':'moderator'}')">${u.role==='moderator'?'Demote':'Make Mod'}</button>`:''}
     </div></td></tr>`).join('');
 }
 
-function openMembershipModal(userId,userName){
-  document.getElementById('membershipUserId').value=userId;
-  document.getElementById('membershipUserName').textContent=userName;
-  document.getElementById('membershipAlert').style.display='none';
-  document.getElementById('membershipType').value='monthly';
-  document.getElementById('membershipDays').value='30';
+function openMembershipModal(userId, userName, currentType) {
+  document.getElementById('memUserId').value = userId;
+  document.getElementById('memUserName').textContent = userName;
+  document.getElementById('memAlert').className = 'alert';
+  document.getElementById('memType').value = currentType || 'monthly';
+  document.getElementById('memDays').value = 30;
+  updateDays();
   document.getElementById('membershipModal').classList.add('open');
 }
 
-function closeMembershipModal(){document.getElementById('membershipModal').classList.remove('open')}
+function closeMembershipModal() { document.getElementById('membershipModal').classList.remove('open'); }
 
-async function grantMembership(){
-  const user_id=parseInt(document.getElementById('membershipUserId').value);
-  const membership_type=document.getElementById('membershipType').value;
-  const duration_days=parseInt(document.getElementById('membershipDays').value)||30;
-  const{ok,data}=await api('POST','/admin/grant-membership',{user_id,membership_type,duration_days});
-  const alertEl=document.getElementById('membershipAlert');
-  if(!ok){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent=data.error;return}
-  alertEl.style.display='block';alertEl.className='alert alert-success';alertEl.textContent='Membership granted!';
-  setTimeout(()=>{closeMembershipModal();loadUsers()},1000);
+function updateDays() {
+  const type = document.getElementById('memType').value;
+  const days = type === 'yearly' ? 365 : type === 'free' ? 0 : 30;
+  document.getElementById('memDays').value = days;
+  if (type === 'free') { document.getElementById('memExpiryPreview').textContent = 'Membership revoked'; }
+  else {
+    const exp = new Date(Date.now() + days * 86400000);
+    document.getElementById('memExpiryPreview').textContent = exp.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  }
 }
 
-async function toggleBlock(id,current){await api('PUT',`/admin/users/${id}`,{is_blocked:current?0:1});loadUsers();}
-async function changeRole(id,role){await api('PUT',`/admin/users/${id}`,{role});loadUsers();}
+document.getElementById('memDays').addEventListener('input', () => {
+  const days = parseInt(document.getElementById('memDays').value) || 0;
+  if (days > 0) { const exp = new Date(Date.now() + days*86400000); document.getElementById('memExpiryPreview').textContent = exp.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}); }
+});
 
-// ═══ HOMEPAGE ═══
-async function loadFeatured(){
-  const{ok,data}=await api('GET','/admin/featured');
-  const tbody=document.getElementById('featuredTbody');
-  if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:28px;color:var(--muted)">No featured articles.</td></tr>';}
-  else{tbody.innerHTML=data.map(f=>`<tr><td style="font-weight:500">${esc(f.title)}</td><td>${esc(f.category_name||'—')}</td><td><button class="btn btn-danger btn-xs" onclick="removeFeatured(${f.id})">Remove</button></td></tr>`).join('');}
-  const sel=document.getElementById('featuredSelect');
-  const{ok:ok2,data:all}=await api('GET','/admin/articles');
-  const published=(ok2?all:[]).filter(a=>a.status==='published'||a.status==='archived');
-  sel.innerHTML='<option value="">— Select —</option>'+published.map(a=>`<option value="${a.id}">${esc(a.title)}</option>`).join('');
+async function grantMembership() {
+  const user_id = parseInt(document.getElementById('memUserId').value);
+  const membership_type = document.getElementById('memType').value;
+  const duration_days = parseInt(document.getElementById('memDays').value) || 30;
+  const alertEl = document.getElementById('memAlert');
+  if (membership_type === 'free') {
+    // Revoke
+    const { ok, data } = await api('PUT', `/admin/users/${user_id}`, { membership_type:'free', membership_expires:null });
+    if (!ok) { alertEl.className='alert alert-error show'; alertEl.textContent=data.error; return; }
+    alertEl.className='alert alert-success show'; alertEl.textContent='Membership revoked.';
+    setTimeout(()=>{ closeMembershipModal(); loadUsers(); }, 1000); return;
+  }
+  const { ok, data } = await api('POST', '/admin/grant-membership', { user_id, membership_type, duration_days });
+  if (!ok) { alertEl.className='alert alert-error show'; alertEl.textContent=data.error; return; }
+  alertEl.className='alert alert-success show'; alertEl.textContent='Membership granted successfully!';
+  setTimeout(()=>{ closeMembershipModal(); loadUsers(); }, 1200);
 }
 
-async function addFeatured(){
-  const article_id=document.getElementById('featuredSelect').value;
-  if(!article_id)return alert('Select an article');
-  await api('POST','/admin/featured',{article_id:parseInt(article_id)});
-  loadFeatured();
+async function toggleBlock(id, current) { await api('PUT', `/admin/users/${id}`, { is_blocked: current?0:1 }); loadUsers(); }
+async function changeRole(id, role) { if (!confirm(`Change role to "${role}"?`)) return; await api('PUT', `/admin/users/${id}`, { role }); loadUsers(); }
+
+/* ─── HOMEPAGE ─── */
+async function loadHomepage() {
+  const { ok, data } = await api('GET', '/admin/featured');
+  const tbody = document.getElementById('featuredTbody');
+  if (!ok || !data.length) { tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No featured articles. Add some below.</td></tr>'; }
+  else { tbody.innerHTML = data.map(f=>`<tr><td style="font-weight:600">${esc(f.title)}</td><td>${esc(f.category_name||'—')}</td><td><span class="badge b-${f.status}">${f.status}</span></td><td><button class="btn btn-danger btn-xs" onclick="removeFeatured(${f.id})">Remove</button></td></tr>`).join(''); }
+  // Load article selector
+  const { ok:ok2, data:arts } = await api('GET', '/admin/articles');
+  const published = (ok2?arts:[]).filter(a=>['published','archived'].includes(a.status));
+  document.getElementById('featuredSelect').innerHTML = '<option value="">— Choose article —</option>'
+    + published.map(a=>`<option value="${a.id}">[${a.status}] ${esc(a.title)}</option>`).join('');
 }
 
-async function removeFeatured(articleId){await api('DELETE',`/admin/featured/${articleId}`);loadFeatured();}
+async function addFeatured() {
+  const article_id = document.getElementById('featuredSelect').value;
+  if (!article_id) { alert('Please select an article.'); return; }
+  await api('POST', '/admin/featured', { article_id: parseInt(article_id) });
+  loadHomepage();
+}
 
-function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
+async function removeFeatured(articleId) {
+  await api('DELETE', `/admin/featured/${articleId}`); loadHomepage();
+}
 
-document.getElementById('articleModal').addEventListener('click',function(e){if(e.target===this)closeArticleModal()});
-document.getElementById('categoryModal').addEventListener('click',function(e){if(e.target===this)closeCategoryModal()});
-document.getElementById('noticeModal').addEventListener('click',function(e){if(e.target===this)closeNoticeModal()});
-document.getElementById('membershipModal').addEventListener('click',function(e){if(e.target===this)closeMembershipModal()});
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
 
 loadDashboard();
 </script>
