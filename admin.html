@@ -19,7 +19,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 .sidebar{width:var(--sw);background:var(--sidebar-bg);color:#e0e0e0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform .3s;overflow-y:auto}
 .sidebar-top{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.sidebar-logo{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
+.sidebar-logo{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-0.02em;text-decoration:none}
 .sidebar-logo span{color:#60a5fa}
 .sidebar-sub{font-size:0.65rem;color:#888;text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
 .nav-section{padding:8px 0}
@@ -37,7 +37,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .admin-badge{font-size:0.64rem;background:rgba(37,99,235,0.08);color:var(--accent);padding:4px 10px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
 .menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer}
 .content{padding:24px;flex:1}
-
 .view{display:none}
 .view.active{display:block}
 
@@ -48,7 +47,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .section-title{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:700}
-
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px}
 .card-body{padding:20px}
 
@@ -85,6 +83,7 @@ tr:hover td{background:var(--surface2)}
 .badge-published{background:rgba(22,163,74,0.08);color:var(--success)}
 .badge-draft{background:rgba(115,115,115,0.08);color:var(--muted)}
 .badge-scheduled{background:rgba(37,99,235,0.08);color:var(--accent)}
+.badge-archived{background:rgba(115,115,115,0.06);color:var(--muted);border:1px solid var(--border)}
 .badge-premium{background:rgba(124,58,237,0.08);color:var(--premium)}
 .badge-free{background:rgba(22,163,74,0.08);color:var(--success)}
 .badge-blocked{background:rgba(220,38,38,0.08);color:var(--error)}
@@ -97,8 +96,11 @@ tr:hover td{background:var(--surface2)}
 .modal-overlay.open{display:grid}
 .modal{background:var(--surface);border-radius:var(--radius);padding:28px 24px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative;animation:modalIn 0.2s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);line-height:1}
 .modal h3{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:18px}
+
+footer{border-top:1px solid var(--border);text-align:center;padding:16px;font-size:0.72rem;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none}
 
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%)}
@@ -113,31 +115,29 @@ tr:hover td{background:var(--surface2)}
 <body>
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-top"><div class="sidebar-logo">md<span>alamin</span></div><div class="sidebar-sub">Admin Panel</div></div>
+  <div class="sidebar-top"><a href="/" class="sidebar-logo">md<span>alamin</span></a><div class="sidebar-sub">Admin Panel</div></div>
   <div class="nav-section"><div class="nav-label">Content</div>
-    <button class="nav-item active" onclick="showView('dashboard')">📊 Dashboard</button>
-    <button class="nav-item" onclick="showView('articles')">📝 Articles</button>
-    <button class="nav-item" onclick="showView('categories')">📂 Categories</button>
-    <button class="nav-item" onclick="showView('notices')">🔔 Notices</button>
+    <button class="nav-item active" onclick="showView('dashboard')">Dashboard</button>
+    <button class="nav-item" onclick="showView('articles')">Articles</button>
+    <button class="nav-item" onclick="showView('categories')">Categories</button>
+    <button class="nav-item" onclick="showView('notices')">Notices</button>
   </div>
   <div class="nav-section"><div class="nav-label">Management</div>
-    <button class="nav-item" onclick="showView('users')">👥 Users</button>
-    <button class="nav-item" onclick="showView('homepage')">🏠 Homepage</button>
+    <button class="nav-item" onclick="showView('users')">Users</button>
+    <button class="nav-item" onclick="showView('homepage')">Homepage</button>
   </div>
   <div class="sidebar-footer"><span id="adminInfo"></span><button class="btn-logout" onclick="logout()">Sign Out</button></div>
 </aside>
 
 <main class="main">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px"><button class="menu-btn" onclick="toggleSidebar()">☰</button><div class="topbar-title" id="topbarTitle">Dashboard</div></div>
+    <div style="display:flex;align-items:center;gap:10px"><button class="menu-btn" onclick="toggleSidebar()">&#9776;</button><div class="topbar-title" id="topbarTitle">Dashboard</div></div>
     <span class="admin-badge">Admin</span>
   </div>
   <div class="content">
 
     <!-- DASHBOARD -->
-    <div class="view active" id="view-dashboard">
-      <div class="stats" id="dashStats"></div>
-    </div>
+    <div class="view active" id="view-dashboard"><div class="stats" id="dashStats"></div></div>
 
     <!-- ARTICLES -->
     <div class="view" id="view-articles">
@@ -177,7 +177,7 @@ tr:hover td{background:var(--surface2)}
 
     <!-- HOMEPAGE -->
     <div class="view" id="view-homepage">
-      <div class="section-head"><div class="section-title">Homepage Featured Articles</div></div>
+      <div class="section-head"><div class="section-title">Homepage Featured</div></div>
       <div class="card"><div class="table-wrap"><table>
         <thead><tr><th>Title</th><th>Category</th><th>Actions</th></tr></thead>
         <tbody id="featuredTbody"></tbody>
@@ -190,6 +190,7 @@ tr:hover td{background:var(--surface2)}
     </div>
 
   </div>
+  <footer><a href="/">Home</a> &middot; <a href="/contact.html">Contact</a><br>&copy; 2024 mdalamin</footer>
 </main>
 
 <!-- ARTICLE MODAL -->
@@ -201,23 +202,21 @@ tr:hover td{background:var(--surface2)}
     <input type="hidden" id="editArticleId">
     <div class="form-row">
       <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="artTitle"></div>
-      <div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="artSlug" placeholder="auto-generated if empty"><span class="form-hint">Leave empty to auto-generate from title</span></div>
+      <div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="artSlug" placeholder="auto-generated"><span class="form-hint">Leave empty to auto-generate</span></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="artCategory"><option value="">— None —</option></select></div>
-      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="artStatus"><option value="draft">Draft</option><option value="published">Published</option><option value="scheduled">Scheduled</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="artStatus"><option value="draft">Draft</option><option value="published">Published</option><option value="scheduled">Scheduled</option><option value="archived">Archived</option></select></div>
     </div>
     <div class="form-group"><label class="form-label">Excerpt</label><textarea class="form-textarea" id="artExcerpt" style="min-height:60px" placeholder="Short summary..."></textarea></div>
-    <div class="form-group"><label class="form-label">Body (HTML supported) *</label><textarea class="form-textarea" id="artBody" style="min-height:200px;font-family:monospace;font-size:0.8rem" placeholder="<h2>Subheading</h2><p>Content...</p><img src='url'><strong>Bold</strong>"></textarea></div>
+    <div class="form-group"><label class="form-label">Body (HTML supported) *</label><textarea class="form-textarea" id="artBody" style="min-height:200px;font-family:monospace;font-size:0.8rem" placeholder="<h2>Heading</h2><p>Content...</p>"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Featured Image URL</label><input class="form-input" id="artImage" placeholder="https://..."></div>
       <div class="form-group"><label class="form-label">Schedule Date</label><input class="form-input" type="datetime-local" id="artSchedule"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="toggle-label"><input type="checkbox" id="artPremium"><span>Premium content</span></label></div>
-      <div class="form-group" style="display:flex;align-items:flex-end">
-        <button class="btn btn-ghost btn-sm" onclick="uploadImage()" style="width:100%">📷 Upload Image to ImgBB</button>
-      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-ghost btn-sm" onclick="uploadImage()">Upload Image to ImgBB</button></div>
     </div>
     <div class="form-group" id="imageUploadResult" style="display:none"></div>
     <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="saveArticle()">Save Article</button><button class="btn btn-ghost" onclick="closeArticleModal()">Cancel</button></div>
@@ -253,7 +252,7 @@ tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-<!-- GRANT MEMBERSHIP MODAL -->
+<!-- MEMBERSHIP MODAL -->
 <div class="modal-overlay" id="membershipModal">
   <div class="modal" style="max-width:440px">
     <button class="modal-close" onclick="closeMembershipModal()">&times;</button>
@@ -272,6 +271,7 @@ const token=localStorage.getItem('blog_token');
 const user=JSON.parse(localStorage.getItem('blog_user')||'null');
 if(!token||!user||user.role==='user')window.location.href='/';
 document.getElementById('adminInfo').textContent=user.email;
+const isAdmin=user.role==='admin';
 
 let allCategories=[],allArticles=[];
 
@@ -291,8 +291,10 @@ function showView(id){
   if(id==='articles')loadArticles();
   if(id==='categories')loadCategoriesAdmin();
   if(id==='notices')loadNotices();
-  if(id==='users')loadUsers();
-  if(id==='homepage')loadFeatured();
+  if(id==='users'&&isAdmin)loadUsers();
+  if(id==='homepage'&&isAdmin)loadFeatured();
+  if(id==='users'&&!isAdmin){alert('Only admin can access this');showView('dashboard')}
+  if(id==='homepage'&&!isAdmin){alert('Only admin can access this');showView('dashboard')}
 }
 
 async function api(method,path,body){
@@ -303,10 +305,10 @@ async function api(method,path,body){
   return{ok:res.ok,data};
 }
 
-// ═══ DASHBOARD ═══
 async function loadDashboard(){
   const[artRes,catRes,userRes,noticeRes]=await Promise.all([
-    api('GET','/admin/articles'),api('GET','/admin/categories'),api('GET','/admin/users'),api('GET','/admin/notices')
+    api('GET','/admin/articles'),api('GET','/admin/categories'),
+    isAdmin?api('GET','/admin/users'):{ok:true,data:[]},api('GET','/admin/notices')
   ]);
   const arts=artRes.ok?artRes.data:[];allArticles=arts;
   const cats=catRes.ok?catRes.data:[];allCategories=cats;
@@ -314,30 +316,31 @@ async function loadDashboard(){
   const notices=noticeRes.ok?noticeRes.data:[];
   const published=arts.filter(a=>a.status==='published').length;
   const drafts=arts.filter(a=>a.status==='draft').length;
+  const archived=arts.filter(a=>a.status==='archived').length;
   const premium=arts.filter(a=>a.is_premium).length;
   document.getElementById('dashStats').innerHTML=`
-    <div class="stat"><div class="stat-label">Total Articles</div><div class="stat-val">${arts.length}</div></div>
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${arts.length}</div></div>
     <div class="stat"><div class="stat-label">Published</div><div class="stat-val">${published}</div></div>
     <div class="stat"><div class="stat-label">Drafts</div><div class="stat-val">${drafts}</div></div>
+    <div class="stat"><div class="stat-label">Archived</div><div class="stat-val">${archived}</div></div>
     <div class="stat"><div class="stat-label">Premium</div><div class="stat-val">${premium}</div></div>
     <div class="stat"><div class="stat-label">Categories</div><div class="stat-val">${cats.length}</div></div>
-    <div class="stat"><div class="stat-label">Users</div><div class="stat-val">${users.length}</div></div>
+    ${isAdmin?`<div class="stat"><div class="stat-label">Users</div><div class="stat-val">${users.length}</div></div>`:''}
     <div class="stat"><div class="stat-label">Notices</div><div class="stat-val">${notices.length}</div></div>
   `;
 }
 
 // ═══ ARTICLES ═══
 async function loadArticles(){
-  const{ok,data}=await api('GET','/admin/articles');
-  allArticles=ok?data:[];
+  const{ok,data}=await api('GET','/admin/articles');allArticles=ok?data:[];
   const tbody=document.getElementById('articlesTbody');
   if(!allArticles.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No articles yet.</td></tr>';return}
   tbody.innerHTML=allArticles.map(a=>`<tr>
-    <td style="font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.title)}</td>
+    <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.title)}</td>
     <td>${esc(a.category_name||'—')}</td>
-    <td><span class="badge badge-${a.status}">${a.status}</span></td>
+    <td><span class="badge badge-${a.status==='archived'?'archived':a.status}">${a.status}</span></td>
     <td>${a.is_premium?'<span class="badge badge-premium">Premium</span>':'<span class="badge badge-free">Free</span>'}</td>
-    <td style="font-size:0.75rem">${a.published_at?new Date(a.published_at).toLocaleDateString():'—'}</td>
+    <td style="font-size:0.72rem">${a.published_at?new Date(a.published_at).toLocaleDateString():'—'}</td>
     <td><div style="display:flex;gap:4px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-xs" onclick="editArticle(${a.id})">Edit</button>
       <button class="btn btn-danger btn-xs" onclick="deleteArticle(${a.id})">Del</button>
@@ -352,15 +355,12 @@ function openArticleModal(id=null){
   document.getElementById('artTitle').value='';document.getElementById('artSlug').value='';
   document.getElementById('artExcerpt').value='';document.getElementById('artBody').value='';
   document.getElementById('artImage').value='';document.getElementById('artSchedule').value='';
-  document.getElementById('artPremium').checked=false;
-  document.getElementById('artStatus').value='draft';
-  loadCategoriesSelect();
-  document.getElementById('articleModal').classList.add('open');
+  document.getElementById('artPremium').checked=false;document.getElementById('artStatus').value='draft';
+  loadCategoriesSelect();document.getElementById('articleModal').classList.add('open');
 }
 
 async function editArticle(id){
-  const a=allArticles.find(x=>x.id===id);
-  if(!a)return;
+  const a=allArticles.find(x=>x.id===id);if(!a)return;
   document.getElementById('articleModalTitle').textContent='Edit Article';
   document.getElementById('editArticleId').value=a.id;
   document.getElementById('artTitle').value=a.title||'';
@@ -389,10 +389,8 @@ async function saveArticle(){
   const status=document.getElementById('artStatus').value;
   const scheduled_at=document.getElementById('artSchedule').value||null;
   const alertEl=document.getElementById('articleAlert');
-
-  if(!title||!body){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent='Title and body are required';return}
+  if(!title||!body){alertEl.style.display='block';alertEl.className='alert alert-error';alertEl.textContent='Title and body required';return}
   alertEl.style.display='none';
-
   const payload={title,slug,excerpt,body,category_id:category_id?parseInt(category_id):null,featured_image,is_premium,status,scheduled_at};
   const method=id?'PUT':'POST';
   const path=id?`/admin/articles/${id}`:'/admin/articles';
@@ -417,12 +415,10 @@ async function uploadImage(){
       const base64=e.target.result.split(',')[1];
       const{ok,data}=await api('POST','/admin/upload-image',{image:base64});
       const resultEl=document.getElementById('imageUploadResult');
-      if(ok){resultEl.style.display='block';resultEl.innerHTML=`<div class="alert alert-success">Uploaded! URL: <input class="form-input" value="${data.url}" onclick="this.select()" style="display:inline;width:auto;font-size:0.75rem" readonly></div>`;document.getElementById('artImage').value=data.url;}
-      else{resultEl.style.display='block';resultEl.innerHTML=`<div class="alert alert-error">Upload failed</div>`;}
-    };
-    reader.readAsDataURL(file);
-  };
-  fileInput.click();
+      if(ok){resultEl.style.display='block';resultEl.innerHTML=`<div class="alert alert-success">Uploaded! <input class="form-input" value="${data.url}" onclick="this.select()" style="width:100%;font-size:0.75rem;margin-top:4px" readonly></div>`;document.getElementById('artImage').value=data.url;}
+      else{resultEl.style.display='block';resultEl.innerHTML='<div class="alert alert-error">Upload failed</div>';}
+    };reader.readAsDataURL(file);
+  };fileInput.click();
 }
 
 // ═══ CATEGORIES ═══
@@ -430,7 +426,7 @@ async function loadCategoriesAdmin(){
   const{ok,data}=await api('GET','/admin/categories');allCategories=ok?data:[];
   const tbody=document.getElementById('categoriesTbody');
   if(!allCategories.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--muted)">No categories.</td></tr>';return}
-  tbody.innerHTML=allCategories.map(c=>`<tr><td style="font-weight:500">${esc(c.name)}</td><td>${c.slug}</td><td>${c.show_on_homepage?'✅':'—'}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editCategory(${c.id})">Edit</button><button class="btn btn-danger btn-xs" onclick="deleteCategory(${c.id})">Del</button></div></td></tr>`).join('');
+  tbody.innerHTML=allCategories.map(c=>`<tr><td style="font-weight:500">${esc(c.name)}</td><td>${c.slug}</td><td>${c.show_on_homepage?'Yes':'—'}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editCategory(${c.id})">Edit</button>${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteCategory(${c.id})">Del</button>`:''}</div></td></tr>`).join('');
 }
 
 function openCategoryModal(id=null){
@@ -475,7 +471,7 @@ async function loadNotices(){
   const{ok,data}=await api('GET','/admin/notices');
   const tbody=document.getElementById('noticesTbody');
   if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--muted)">No notices.</td></tr>';return}
-  tbody.innerHTML=data.map(n=>`<tr><td style="font-weight:500">${esc(n.title)}</td><td>${n.is_active?'✅ Active':'—'}</td><td style="font-size:0.75rem">${new Date(n.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editNotice(${n.id})">Edit</button><button class="btn btn-danger btn-xs" onclick="deleteNotice(${n.id})">Del</button></div></td></tr>`).join('');
+  tbody.innerHTML=data.map(n=>`<tr><td style="font-weight:500">${esc(n.title)}</td><td>${n.is_active?'Active':'—'}</td><td style="font-size:0.72rem">${new Date(n.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="editNotice(${n.id})">Edit</button>${isAdmin?`<button class="btn btn-danger btn-xs" onclick="deleteNotice(${n.id})">Del</button>`:''}</div></td></tr>`).join('');
 }
 
 function openNoticeModal(id=null){
@@ -525,7 +521,7 @@ async function loadUsers(){
   const tbody=document.getElementById('usersTbody');
   if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No users.</td></tr>';return}
   tbody.innerHTML=data.map(u=>`<tr>
-    <td style="font-weight:500">${esc(u.name)}</td><td style="font-size:0.78rem">${esc(u.email)}</td>
+    <td style="font-weight:500">${esc(u.name)}</td><td style="font-size:0.75rem">${esc(u.email)}</td>
     <td><span class="badge ${u.role==='admin'?'badge-premium':'badge-free'}">${u.role}</span></td>
     <td><span class="badge ${u.membership_type!=='free'?'badge-premium':'badge-free'}">${u.membership_type}</span>${u.membership_expires?` <small style="color:var(--muted)">${new Date(u.membership_expires).toLocaleDateString()}</small>`:''}</td>
     <td>${u.is_blocked?'<span class="badge badge-blocked">Blocked</span>':'<span class="badge badge-free">Active</span>'}</td>
@@ -567,10 +563,9 @@ async function loadFeatured(){
   const tbody=document.getElementById('featuredTbody');
   if(!ok||!data.length){tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:28px;color:var(--muted)">No featured articles.</td></tr>';}
   else{tbody.innerHTML=data.map(f=>`<tr><td style="font-weight:500">${esc(f.title)}</td><td>${esc(f.category_name||'—')}</td><td><button class="btn btn-danger btn-xs" onclick="removeFeatured(${f.id})">Remove</button></td></tr>`).join('');}
-  // Load select
   const sel=document.getElementById('featuredSelect');
   const{ok:ok2,data:all}=await api('GET','/admin/articles');
-  const published=(ok2?all:[]).filter(a=>a.status==='published');
+  const published=(ok2?all:[]).filter(a=>a.status==='published'||a.status==='archived');
   sel.innerHTML='<option value="">— Select —</option>'+published.map(a=>`<option value="${a.id}">${esc(a.title)}</option>`).join('');
 }
 
@@ -583,7 +578,6 @@ async function addFeatured(){
 
 async function removeFeatured(articleId){await api('DELETE',`/admin/featured/${articleId}`);loadFeatured();}
 
-// ═══ UTILS ═══
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 
 document.getElementById('articleModal').addEventListener('click',function(e){if(e.target===this)closeArticleModal()});
