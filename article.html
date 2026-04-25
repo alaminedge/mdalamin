@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article — mdalamin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lexend:wght@500;600;700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#fafafa; --surface:#fff; --surface2:#f5f5f5; --border:#e5e5e5;
+  --accent:#2563eb; --accent2:#1d4ed8;
+  --text:#171717; --muted:#737373; --error:#dc2626; --premium:#7c3aed;
+  --radius:12px; --radius-sm:8px; --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+nav{background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+  padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Lexend',sans-serif;font-size:1.25rem;font-weight:800;letter-spacing:-0.03em;text-decoration:none;color:var(--text)}
+.nav-logo span{color:var(--accent)}
+.btn-back{padding:8px 16px;border:1.5px solid var(--border);border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;text-decoration:none;color:var(--muted);transition:all var(--transition);background:transparent}
+.btn-back:hover{border-color:var(--accent);color:var(--accent)}
+
+.article-container{max-width:780px;margin:0 auto;padding:40px 24px 60px}
+.article-header{margin-bottom:32px}
+.article-category{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:12px}
+.article-title{font-family:'Lexend',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.25;letter-spacing:-0.03em;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:0.85rem;color:var(--muted);margin-bottom:20px}
+.article-meta span{display:flex;align-items:center;gap:5px}
+.premium-badge{display:inline-flex;align-items:center;gap:4px;font-size:0.75rem;font-weight:700;color:var(--premium);background:rgba(124,58,237,0.06);padding:4px 12px;border-radius:12px}
+.featured-image{width:100%;max-height:450px;object-fit:cover;border-radius:var(--radius);margin-bottom:32px;border:1px solid var(--border)}
+.article-body{font-size:1.05rem;line-height:1.85;color:#333}
+.article-body h1,.article-body h2,.article-body h3{font-family:'Lexend',sans-serif;font-weight:700;margin:28px 0 12px;line-height:1.3;color:var(--text)}
+.article-body h2{font-size:1.5rem}
+.article-body h3{font-size:1.2rem}
+.article-body p{margin-bottom:18px}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius-sm);margin:20px 0;border:1px solid var(--border)}
+.article-body strong{font-weight:700}
+.article-body a{color:var(--accent);text-decoration:underline}
+.article-body blockquote{border-left:3px solid var(--accent);padding-left:18px;margin:20px 0;color:var(--muted);font-style:italic}
+.article-body ul,.article-body ol{padding-left:24px;margin-bottom:18px}
+.article-body li{margin-bottom:6px}
+.article-body code{background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:0.9em}
+.article-body pre{background:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:var(--radius-sm);overflow-x:auto;margin:20px 0;font-size:0.88rem;line-height:1.6}
+
+.locked-overlay{text-align:center;padding:60px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.locked-overlay .icon{font-size:3rem;margin-bottom:16px}
+.locked-overlay h2{font-family:'Lexend',sans-serif;font-size:1.4rem;margin-bottom:8px}
+.locked-overlay p{color:var(--muted);margin-bottom:20px}
+.btn-upgrade{padding:12px 28px;background:var(--premium);color:#fff;border:none;border-radius:24px;font-family:'Lexend',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+.btn-upgrade:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.25)}
+
+.loading{text-align:center;padding:80px;color:var(--muted)}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .article-container{padding:24px 16px 40px}
+  .article-body{font-size:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">md<span>alamin</span></a>
+  <a href="/" class="btn-back">← Back to Home</a>
+</nav>
+
+<div class="article-container" id="articleContent">
+  <div class="loading"><div class="spinner"></div><p>Loading article...</p></div>
+</div>
+
+<script>
+const token = localStorage.getItem('blog_token');
+const user = JSON.parse(localStorage.getItem('blog_user') || 'null');
+const slug = new URLSearchParams(location.search).get('slug');
+
+if(!slug) window.location.href = '/';
+
+async function loadArticle(){
+  try{
+    const headers = {};
+    if(token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`/api/blog/article/${slug}`, { headers });
+    const article = await res.json();
+
+    if(article.error){
+      document.getElementById('articleContent').innerHTML = `<div class="locked-overlay"><div class="icon">⚠️</div><h2>Article Not Found</h2><p>${article.error}</p></div>`;
+      return;
+    }
+
+    if(article.locked){
+      document.getElementById('articleContent').innerHTML = `
+        <div class="locked-overlay">
+          <div class="icon">🔒</div>
+          <h2>Premium Content</h2>
+          <p>This article is for members only. Upgrade your membership to read.</p>
+          <p style="font-size:0.85rem;color:var(--muted)">Monthly 100 BDT · Max 200 BDT · Yearly 1200 BDT</p>
+          <p style="font-size:0.8rem;color:var(--muted)">Contact: <strong>nx@gmail.com</strong> or Telegram <strong>@nxReal</strong></p>
+          ${!user ? '<button class="btn-upgrade" onclick="window.location.href=\'/\'">Sign In</button>' : ''}
+        </div>`;
+      return;
+    }
+
+    document.title = `${article.title} — mdalamin`;
+    document.getElementById('articleContent').innerHTML = `
+      <div class="article-header">
+        ${article.category_name ? `<div class="article-category">${esc(article.category_name)}</div>` : ''}
+        <h1 class="article-title">${esc(article.title)}</h1>
+        <div class="article-meta">
+          <span>By ${esc(article.author_name || 'Admin')}</span>
+          <span>·</span>
+          <span>${article.published_at ? new Date(article.published_at).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) : ''}</span>
+          ${article.is_premium ? '<span class="premium-badge">✦ Premium</span>' : '<span style="color:var(--success);font-weight:600;font-size:0.75rem">Free</span>'}
+        </div>
+      </div>
+      ${article.featured_image ? `<img class="featured-image" src="${article.featured_image}" alt="${esc(article.title)}" loading="lazy">` : ''}
+      <div class="article-body">${article.body}</div>
+    `;
+  }catch(e){
+    document.getElementById('articleContent').innerHTML = `<div class="locked-overlay"><div class="icon">⚠️</div><h2>Error</h2><p>Failed to load article.</p></div>`;
+  }
+}
+
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+loadArticle();
+</script>
+</body>
+</html>
