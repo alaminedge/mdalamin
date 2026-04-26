@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — mdalamin</title>
+<meta name="description" content="Get in touch with mdalamin. Reach out for premium membership, inquiries, or support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#0d0d0d; --paper:#faf9f7; --paper2:#f2f0ec; --cream:#ede9e1;
+  --gold:#c9a84c; --gold2:#b8973a; --muted:#777265; --border:#e0dbd2; --border2:#ccc8bf;
+  --accent:#1a3a5c; --error:#c0392b; --success:#2e7d52;
+  --radius:5px; --radius-md:9px; --radius-lg:14px;
+  --transition:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+/* NAV */
+nav{background:rgba(250,249,247,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1120px;margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.nav-logo em{font-style:italic;color:var(--accent)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.8rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:color var(--transition)}
+.nav-links a:hover{color:var(--ink)}
+
+/* MAIN */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.contact-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);max-width:580px;width:100%;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.06)}
+.contact-header{background:var(--ink);padding:32px 32px 28px;text-align:center}
+.contact-header h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:6px}
+.contact-header p{color:rgba(255,255,255,0.55);font-size:0.84rem}
+.contact-body{padding:32px}
+
+.contact-methods{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.cm-card{background:var(--paper2);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;transition:all var(--transition);text-decoration:none;color:var(--ink)}
+.cm-card:hover{border-color:var(--gold);box-shadow:0 4px 16px rgba(201,168,76,0.1)}
+.cm-icon{font-size:1.4rem;margin-bottom:6px}
+.cm-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:2px}
+.cm-value{font-size:0.82rem;font-weight:600;color:var(--ink)}
+
+.divider{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:0.64rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace}
+.form-input,.form-textarea{width:100%;padding:12px 15px;background:var(--paper2);border:1.5px solid var(--border);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;transition:all var(--transition)}
+.form-input:focus,.form-textarea:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,58,92,0.06)}
+.form-textarea{resize:vertical;min-height:120px}
+.form-select{width:100%;padding:12px 15px;background:var(--paper2);border:1.5px solid var(--border);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--ink);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23777265' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+
+.btn-submit{width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:var(--radius);font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all var(--transition);letter-spacing:.02em}
+.btn-submit:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 8px 24px rgba(26,58,92,0.2)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+.alert{padding:12px 15px;border-radius:var(--radius);font-size:0.82rem;margin-bottom:16px;display:none;text-align:center}
+.alert.show{display:block}
+.alert-error{background:#fef2f2;border:1px solid #fecaca;color:var(--error)}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--success)}
+.alert-warning{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.rate-limit-info{text-align:center;font-size:0.7rem;color:var(--muted);margin-top:12px;font-family:'DM Mono',monospace}
+
+/* FOOTER */
+footer{background:var(--ink);padding:24px 28px;text-align:center}
+footer p{color:rgba(255,255,255,0.25);font-size:0.72rem}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:600px){
+  .contact-header{padding:24px 20px 22px}
+  .contact-body{padding:22px 20px}
+  .contact-methods{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">md<em>alamin</em></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#categoriesRow">Categories</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="contact-card">
+    <div class="contact-header">
+      <h1>Get in Touch</h1>
+      <p>Questions, premium membership, or collaboration</p>
+    </div>
+    <div class="contact-body">
+
+      <!-- Contact Methods -->
+      <div class="contact-methods">
+        <a href="https://t.me/nxReal" target="_blank" rel="noopener" class="cm-card">
+          <div class="cm-icon">✈️</div>
+          <div class="cm-label">Telegram</div>
+          <div class="cm-value">@nxReal</div>
+        </a>
+        <div class="cm-card">
+          <div class="cm-icon">⏱️</div>
+          <div class="cm-label">Response Time</div>
+          <div class="cm-value">Within 24 hours</div>
+        </div>
+      </div>
+
+      <div class="divider"><span>Or Send a Message</span></div>
+
+      <!-- Alert -->
+      <div class="alert" id="formAlert"></div>
+
+      <!-- Rate Limit Warning -->
+      <div class="rate-limit-info" id="rateInfo">
+        Messages remaining today: <strong id="msgsLeft">2</strong>
+      </div>
+
+      <!-- Form -->
+      <form id="contactForm" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="access_key" value="d175b8a6-796d-430f-8314-d49195a63000">
+        <input type="hidden" name="from_name" value="mdalamin Contact Form">
+        <input type="hidden" name="subject" value="New message from mdalamin contact form">
+        
+        <!-- Honeypot (anti-spam) -->
+        <input type="text" name="botcheck" style="display:none">
+
+        <div class="form-group">
+          <label class="form-label">Your Name *</label>
+          <input class="form-input" type="text" name="name" id="contactName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" name="email" id="contactEmail" placeholder="your@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Topic</label>
+          <select class="form-select" name="topic" id="contactTopic">
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Premium Membership">Premium Membership</option>
+            <option value="Technical Support">Technical Support</option>
+            <option value="Content Suggestion">Content Suggestion</option>
+            <option value="Collaboration">Collaboration</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Write your message here... Be as detailed as possible." required></textarea>
+        </div>
+
+        <!-- Redirect after success -->
+        <input type="hidden" name="redirect" value="https://your-site.com/contact.html?success=1">
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Send Message
+        </button>
+      </form>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 mdalamin · <a href="/">Home</a> · <a href="/contact.html">Contact</a></p>
+</footer>
+
+<script>
+// ═══ RATE LIMITING (2 messages per day) ═══
+const RATE_LIMIT_KEY = 'mdalamin_contact_rate';
+const MAX_MESSAGES = 2;
+
+function getRateData() {
+  try {
+    const data = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{}');
+    const today = new Date().toDateString();
+    if (data.date !== today) {
+      return { date: today, count: 0 };
+    }
+    return data;
+  } catch(e) {
+    return { date: new Date().toDateString(), count: 0 };
+  }
+}
+
+function saveRateData(data) {
+  try {
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function getRemaining() {
+  const data = getRateData();
+  return Math.max(0, MAX_MESSAGES - data.count);
+}
+
+function incrementRate() {
+  const data = getRateData();
+  data.count += 1;
+  saveRateData(data);
+}
+
+function updateRateDisplay() {
+  const remaining = getRemaining();
+  const el = document.getElementById('msgsLeft');
+  const info = document.getElementById('rateInfo');
+  if (el) el.textContent = remaining;
+  
+  if (remaining === 0) {
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').textContent = 'Daily Limit Reached';
+    info.style.color = '#c0392b';
+  }
+}
+
+// ═══ FORM HANDLER ═══
+async function handleSubmit(e) {
+  e.preventDefault();
+  
+  const alertEl = document.getElementById('formAlert');
+  const btn = document.getElementById('submitBtn');
+  
+  // Check rate limit
+  const remaining = getRemaining();
+  if (remaining <= 0) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = 'You have reached your daily message limit. Please try again tomorrow or reach us via Telegram @nxReal.';
+    return;
+  }
+  
+  // Validate
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+  
+  if (!name || !email || !message) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = 'Please fill in all required fields.';
+    return;
+  }
+  
+  if (name.length < 2) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = 'Please enter your full name.';
+    return;
+  }
+  
+  if (!email.includes('@') || !email.includes('.')) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  
+  if (message.length < 10) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = 'Please write a longer message (at least 10 characters).';
+    return;
+  }
+  
+  // Submit
+  alertEl.className = 'alert';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Sending...';
+  
+  try {
+    const form = document.getElementById('contactForm');
+    const formData = new FormData(form);
+    
+    // Append Telegram notification data
+    formData.append('telegram', '@nxReal');
+    formData.append('page_url', window.location.href);
+    formData.append('timestamp', new Date().toISOString());
+    
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      // Increment rate limit
+      incrementRate();
+      updateRateDisplay();
+      
+      alertEl.className = 'alert alert-success show';
+      alertEl.textContent = '✅ Message sent successfully! We\'ll get back to you within 24 hours. For urgent queries, reach us on Telegram @nxReal.';
+      
+      // Clear form
+      form.reset();
+      updateRateDisplay();
+      
+      // Reset button
+      btn.disabled = false;
+      btn.textContent = 'Send Another Message?';
+      btn.onclick = function(){ location.reload(); };
+      
+    } else {
+      throw new Error(data.message || 'Submission failed');
+    }
+    
+  } catch(err) {
+    alertEl.className = 'alert alert-error show';
+    alertEl.textContent = '⚠️ Failed to send. Please try again or reach us directly on Telegram @nxReal.';
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+  }
+}
+
+// ═══ CHECK URL FOR SUCCESS ═══
+function checkSuccessParam() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('success') === '1') {
+    const alertEl = document.getElementById('formAlert');
+    alertEl.className = 'alert alert-success show';
+    alertEl.textContent = '✅ Your message was sent! We\'ll respond within 24 hours.';
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
+
+// ═══ INIT ═══
+updateRateDisplay();
+checkSuccessParam();
+</script>
+
+</body>
+</html>
